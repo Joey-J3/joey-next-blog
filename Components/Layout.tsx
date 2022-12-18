@@ -4,6 +4,10 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import styles from './layout.module.scss'
 import utilStyles from '../styles/utils.module.scss';
+import { Inter } from '@next/font/google'
+import clsx from "clsx";
+
+const inter = Inter({ subsets: ['latin'] })
 
 
 interface LayoutProps {
@@ -13,7 +17,7 @@ const name = "Joey's Blog"
 export const siteTitle = 'Next.js Sample Website';
 
 function Layout({ children, home }: LayoutProps) {
-  return <div className={styles.container}>
+  return <div className={clsx([styles.container, inter.className])}>
   <Head>
     <link rel="icon" href="/favicon.ico" />
     <meta
@@ -34,7 +38,7 @@ function Layout({ children, home }: LayoutProps) {
       <>
         <Image
           priority
-          src="/images/profile.jpg"
+          src="/images/avatar.jpg"
           className={utilStyles.borderCircle}
           height={144}
           width={144}
@@ -47,7 +51,7 @@ function Layout({ children, home }: LayoutProps) {
         <Link href="/">
           <Image
             priority
-            src="/images/profile.jpg"
+            src="/images/avatar.jpg"
             className={utilStyles.borderCircle}
             height={108}
             width={108}

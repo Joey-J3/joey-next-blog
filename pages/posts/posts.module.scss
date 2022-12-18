@@ -1,0 +1,10 @@
+$space: 4px;
+$space-sm: $space*2;
+$space-md: $space*3;
+$space-lg: $space*4;
+
+.container {
+  h1, h2, h3, h4, h5, h6 {
+    margin: 1em 0;
+  }
+}
