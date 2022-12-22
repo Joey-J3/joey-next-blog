@@ -1,9 +1,14 @@
 import LiveMarkdown from "../../Components/LiveMarkdown"
 
 function Draft() {
+
+  const onSave = (value: string) => {
+    console.log(value);
+  }
+
   return (
     <div>
-      <LiveMarkdown />
+      <LiveMarkdown onSave={onSave} />
     </div>
   )
 }
