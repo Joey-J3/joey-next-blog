@@ -1,4 +1,4 @@
-import LiveMarkdown from "../../Components/LiveMarkdown"
+import LiveMarkdown from "../../components/LiveMarkdown"
 
 function Draft() {
 

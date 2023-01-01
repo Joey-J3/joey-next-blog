@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { Visibility } from "@mui/icons-material";
 import styles from './live-markdown.module.scss'
 import CodeBlock from "./CodeBlock";
-import Header from "./Header";
+import Header from "../Header";
 
 interface LiveMarkdownProps {
   onSave: (value: string, e?: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => any;

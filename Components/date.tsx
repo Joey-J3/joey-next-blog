@@ -1,6 +1,8 @@
-import { parseISO, format } from 'date-fns';
+import dayjs from 'dayjs';
+import { TIME_FORMAT } from '../utils';
 
-export default function Date({ dateString }: { dateString: string }) {
-  const date = parseISO(dateString);
-  return <time dateTime={dateString}>{format(date, 'LLLL d, yyyy')}</time>;
+
+export default function Date({ dateString }: { dateString: string | number | Date | dayjs.Dayjs | null | undefined }) {
+  const date = dayjs(dateString);
+  return <time className="text-gray-400" dateTime={date.toISOString()}>{date.format(TIME_FORMAT)}</time>;
 }
