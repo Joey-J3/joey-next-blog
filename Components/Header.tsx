@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
+import { Avatar, Button } from '@mui/material';
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -14,21 +15,11 @@ const Header: React.FC = () => {
   let left = (
     <div className="left">
       <Link href="/" legacyBehavior>
-        <a className="bold" data-active={isActive('/')}>
+        <a className="font-bold no-underline inline-block" data-active={isActive('/')}>
           Feed
         </a>
       </Link>
       <style jsx>{`
-        .bold {
-          font-weight: bold;
-        }
-
-        a {
-          text-decoration: none;
-          color: var(--geist-foreground);
-          display: inline-block;
-        }
-
         .left a[data-active='true'] {
           color: gray;
         }
@@ -43,71 +34,22 @@ const Header: React.FC = () => {
   let right = null;
 
   if (status === 'loading') {
-    left = (
-      <div className="left">
-        <Link href="/" legacyBehavior>
-          <a className="bold" data-active={isActive('/')}>
-            Feed
-          </a>
-        </Link>
-        <style jsx>{`
-          .bold {
-            font-weight: bold;
-          }
-
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
-          .left a[data-active='true'] {
-            color: gray;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-        `}</style>
-      </div>
-    );
     right = (
-      <div className="right">
+      <div className="mr-auto">
         <p>Validating session ...</p>
-        <style jsx>{`
-          .right {
-            margin-left: auto;
-          }
-        `}</style>
       </div>
     );
   }
 
   if (!session) {
     right = (
-      <div className="right">
+      <div className="mr-auto">
         <Link href="/api/auth/signin" legacyBehavior>
-          <a data-active={isActive('/signup')}>Log in</a>
+          <a className='no-underline inline-block ml-4 border border-solid px-4 py-2 rounded' data-active={isActive('/signup')}>Log in</a>
         </Link>
         <style jsx>{`
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
           a + a {
             margin-left: 1rem;
-          }
-
-          .right {
-            margin-left: auto;
-          }
-
-          .right a {
-            border: 1px solid var(--geist-foreground);
-            padding: 0.5rem 1rem;
-            border-radius: 3px;
           }
         `}</style>
       </div>
@@ -118,24 +60,14 @@ const Header: React.FC = () => {
     left = (
       <div className="left">
         <Link href="/" legacyBehavior>
-          <a className="bold" data-active={isActive('/')}>
+          <a className="font-bold no-underline inline-block" data-active={isActive('/')}>
             Feed
           </a>
         </Link>
         <Link href="/drafts" legacyBehavior>
-          <a data-active={isActive('/drafts')}>My drafts</a>
+          <a className='no-underline inline-block' data-active={isActive('/drafts')}>My drafts</a>
         </Link>
         <style jsx>{`
-          .bold {
-            font-weight: bold;
-          }
-
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
           .left a[data-active='true'] {
             color: gray;
           }
@@ -147,64 +79,25 @@ const Header: React.FC = () => {
       </div>
     );
     right = (
-      <div className="right">
-        <p>
+      <div className="right flex flex-nowrap items-center">
+        <Avatar src={session.user?.image || '/images/avatar.jpg'} alt={session.user?.name || ''} sx={{ display: 'inline-block', marginRight: '1rem'}}/>
+        <p className='inline-block text-sm pr-4'>
           {session.user?.name} ({session.user?.email})
         </p>
         <Link href="/create" legacyBehavior>
-          <button>
-            <a>New post</a>
-          </button>
+          <Button variant='outlined'>
+            <span className="text-gray-900">New post</span>
+          </Button>
         </Link>
-        <button onClick={() => signOut()}>
-          <a>Log out</a>
-        </button>
-        <style jsx>{`
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
-          p {
-            display: inline-block;
-            font-size: 13px;
-            padding-right: 1rem;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-
-          .right {
-            margin-left: auto;
-          }
-
-          .right a {
-            border: 1px solid var(--geist-foreground);
-            padding: 0.5rem 1rem;
-            border-radius: 3px;
-          }
-
-          button {
-            border: none;
-          }
-        `}</style>
+        <Button variant="text" onClick={() => signOut()}><span className="text-gray-900">Log out</span></Button>
       </div>
     );
   }
 
   return (
-    <nav>
+    <nav className='flex p-4 items-center justify-between'>
       {left}
       {right}
-      <style jsx>{`
-        nav {
-          display: flex;
-          padding: 2rem;
-          align-items: center;
-        }
-      `}</style>
     </nav>
   );
 };
