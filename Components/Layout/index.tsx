@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 import utilStyles from "@/styles/utils.module.scss";
 import { Inter } from "@next/font/google";
 import clsx from "clsx";
-import Header from "../Header";
+import Header from "@/components/Header";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "@/utils/theme";
 

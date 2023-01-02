@@ -1,16 +1,14 @@
 import Head from "next/head";
-import Date from "@/components/Date";
-import Layout from "@/components/Layout";
-import { getAllPostIds, getPostData } from '@/lib/post';
-import prisma from '@/lib/prisma';
-import utilStyles from '@/styles/utils.module.scss';
-import style from './posts.module.scss'
-import { IPost } from "@/types/index";
-import { GetServerSideProps } from "next";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Button } from "@mui/material";
+import Layout from "@/components/Layout";
+import prisma from '@/lib/prisma';
+import Date from "@/components/Date";
+import utilStyles from '@/styles/utils.module.scss';
+import type { IPost } from "@/types/index";
+import type { GetServerSideProps } from "next";
 
 /**
  * Fetch necessary data for the blog post using params.id

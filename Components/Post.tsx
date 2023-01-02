@@ -1,7 +1,7 @@
 import React from "react";
 import Router from "next/router";
 import ReactMarkdown from "react-markdown";
-import Date from "./Date";
+import Date from "@/components/Date";
 import { IPost } from "../types";
 
 
