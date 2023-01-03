@@ -1,7 +1,7 @@
 .live-markdown__container {
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 72px);
   align-items: center;
   flex-direction: column;
   background-color: #fff;
@@ -28,6 +28,16 @@
   }
   .preview-box {
     background-color: #fff;
+  }
+}
+@media (max-width: 976px) {
+  .wrapper {
+    .editor-box {
+      width: 100%;
+    }
+    .preview-box {
+      display: none;
+    }
   }
 }
 

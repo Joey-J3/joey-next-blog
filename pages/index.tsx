@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import Image from 'next/image';
-import Layout, { siteTitle } from '../components/Layout'
-import utilStyles from '../styles/utils.module.scss'
-import { IPost } from '../types';
+import Layout, { siteTitle } from '@/components/Layout'
+import utilStyles from '@/styles/utils.module.scss'
+import { IPost } from '@/types/index';
 import Link from 'next/link';
 import { GetStaticProps } from 'next';
-import prisma from '../lib/prisma';
+import prisma from '@/lib/prisma';
 import Post from '@/components/Post';
 import { useSession } from 'next-auth/react';
 

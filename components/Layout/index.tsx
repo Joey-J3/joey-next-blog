@@ -39,11 +39,6 @@ function Layout({ children, home }: LayoutProps) {
         </Head>
         <Header />
         <main>{children}</main>
-        {!home && (
-          <div className="mt-12">
-            <Link href="/">← Back to home</Link>
-          </div>
-        )}
       </div>
     </ThemeProvider>
   );

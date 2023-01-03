@@ -95,10 +95,13 @@ const Header: React.FC = () => {
   }
 
   return (
-    <nav className='flex p-4 items-center justify-between'>
-      {left}
-      {right}
-    </nav>
+    <>
+      <nav className='flex p-4 items-center justify-between fixed top-0 left-0 right-0 bg-slate-200 z-50'>
+        {left}
+        {right}
+      </nav>
+      <div className="h-16 p-2 m-2 content-none" />
+    </>
   );
 };
 
