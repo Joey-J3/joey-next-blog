@@ -1,15 +1,15 @@
 import { Button, TextField } from "@mui/material";
-import { Box } from "@mui/system";
-import Router from "next/router";
 import { useEffect, useState } from "react";
-import { IPost } from "../types";
+import Router from "next/router";
+import { Box } from "@mui/system";
+import { CreatePostAPIReqBody, EditPostAPIReqBody, IPost } from "@/types/index";
 import Layout from "./Layout";
 import LiveMarkdown from "./LiveMarkdown";
 
 interface Props {
   isEdit?: boolean;
   post?: IPost;
-  onSubmit: (data: Partial<IPost>, e: React.SyntheticEvent) => Promise<void>;
+  onSubmit: (data: EditPostAPIReqBody | CreatePostAPIReqBody, e: React.SyntheticEvent) => Promise<void>;
 }
 
 const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {

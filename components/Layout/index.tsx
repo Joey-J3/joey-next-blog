@@ -1,10 +1,7 @@
 import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
 import { ReactNode } from "react";
-import utilStyles from "@/styles/utils.module.scss";
 import { Inter } from "@next/font/google";
-import clsx from "clsx";
+import clsx, { ClassValue } from "clsx";
 import Header from "@/components/Header";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "@/utils/theme";
@@ -14,14 +11,15 @@ const inter = Inter({ subsets: ["latin"] });
 interface LayoutProps {
   children: ReactNode;
   home?: boolean;
+  className?: ClassValue[];
 }
 
-export const siteTitle = "Next.js Sample Website";
+export const siteTitle = "Joey Blog";
 
-function Layout({ children, home }: LayoutProps) {
+function Layout({ children, className = [] }: LayoutProps) {
   return (
     <ThemeProvider theme={theme}>
-      <div className={clsx(["w-full mb-24 pl-8 pr-8", inter.className])}>
+      <div className={clsx(["w-full mb-24 pl-8 pr-8", inter.className, ...className])}>
         <Head>
           <link rel="icon" href="/favicon.ico" />
           <meta

@@ -1,6 +1,6 @@
 import Router, { useRouter } from "next/router";
 import Draft from "@/components/Draft";
-import { IPost } from "@/types/index";
+import { EditPostAPIReqBody, IPost } from "@/types/index";
 import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { getPostByID } from "@/lib/post";
@@ -17,10 +17,10 @@ const Edit: React.FC<{ post: IPost }> = ({ post }) => {
   const [ID, setID] = useState("");
   const router = useRouter()
   
-  const submitData = async (data: Partial<IPost>) => {
+  const submitData = async (data: EditPostAPIReqBody) => {
     try {
       await fetch(`/api/post/${ID}`, {
-        method: "POST",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });

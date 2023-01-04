@@ -18,3 +18,6 @@ export type IPost = {
   createdAt: string;
   updatedAt: string;
 }
+
+export type CreatePostAPIReqBody = { title: IPost['title']; content: IPost['content'] }
+export type EditPostAPIReqBody = CreatePostAPIReqBody

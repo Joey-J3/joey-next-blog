@@ -4,11 +4,13 @@ import { useSession } from "next-auth/react";
 import { Button, Box } from "@mui/material";
 import Layout from "@/components/Layout";
 import Date from "@/components/Date";
-import Preview from "@/components/LiveMarkdown/Preview"
+import Preview from "@/components/LiveMarkdown/Preview";
 import type { GetServerSideProps } from "next";
 import type { IPost } from "@/types/index";
-import utilStyles from '@/styles/utils.module.scss';
+import utilStyles from "@/styles/utils.module.scss";
 import { getPostByID } from "@/lib/post";
+import clsx from "clsx";
+import ConfirmDialog from "@/components/ComfirmDialog";
 
 /**
  * Fetch necessary data for the blog post using params.id
@@ -37,8 +39,8 @@ import { getPostByID } from "@/lib/post";
 //   };
 // }
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const post = await getPostByID(params?.id as string)
-  
+  const post = await getPostByID(params?.id as string);
+
   return {
     props: { post },
   };
@@ -46,21 +48,21 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
 async function publishPost(id: string): Promise<void> {
   await fetch(`/api/publish/${id}`, {
-    method: 'PUT',
+    method: "PUT",
   });
-  await Router.push('/');
+  await Router.push("/");
 }
 
 async function deletePost(id: string): Promise<void> {
   await fetch(`/api/post/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
-  Router.push('/');
+  Router.push("/");
 }
 
 /**
  * Return a list of possible value for id
- * @returns {{paths: Array; fallback: boolean}} 
+ * @returns {{paths: Array; fallback: boolean}}
  */
 // export async function getStaticPaths() {
 //   const paths = getAllPostIds();
@@ -71,12 +73,12 @@ async function deletePost(id: string): Promise<void> {
 // }
 
 interface Props {
-  post: IPost
+  post: IPost;
 }
 
 const Post: React.FC<Props> = ({ post }) => {
   const { data: session, status } = useSession();
-  if (status === 'loading') {
+  if (status === "loading") {
     return <div>Authenticating ...</div>;
   }
   const userHasValidSession = Boolean(session);
@@ -85,28 +87,60 @@ const Post: React.FC<Props> = ({ post }) => {
   if (!post.published) {
     title = `${title} (Draft)`;
   }
-  
-  return <Layout>
-  <Head>
-    <title>{post.title}</title>
-  </Head>
 
-  {userHasValidSession && postBelongsToUser && (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
-        {!post.published && <Button onClick={() => publishPost(post.id)} variant="contained">Publish</Button>}
-        <Button onClick={() => Router.push(`/edit/${post.id}`)} variant="outlined" color="primary">Edit</Button>
-        <Button onClick={() => deletePost(post.id)} variant="contained" color="error">Delete</Button>
-      </Box>
-    )}
-  <article>
-    <h1 className={utilStyles.headingXl}>{title}</h1>
-    <div className={utilStyles.lightText}>
-      <Date dateString={post.updatedAt} />
-    </div>
-    <p>By {post?.author?.name || 'Unknown author'}</p>
-    <Preview markdownInput={post.content} />
-  </article>
-</Layout>
-}
+  return (
+    <Layout className={["bg-gray-100", "p-8"]}>
+      <Head>
+        <title>{post.title}</title>
+      </Head>
+
+      <article className="bg-white">
+        <div className="flex justify-between items-center px-8">
+          <h1 className={clsx(utilStyles.headingXl)}>{title}</h1>
+
+          {userHasValidSession && postBelongsToUser && (
+            <Box sx={{ display: "flex", gap: "1rem" }}>
+              {!post.published && (
+                <Button
+                  onClick={() => publishPost(post.id)}
+                  variant="contained"
+                >
+                  Publish
+                </Button>
+              )}
+              <Button
+                onClick={() => Router.push(`/edit/${post.id}`)}
+                variant="outlined"
+                color="primary"
+              >
+                Edit
+              </Button>
+              <ConfirmDialog
+                content={"Are you sure to delete this post?"}
+                onSubmit={() => deletePost(post.id)}
+              >
+                <Button
+                  variant="contained"
+                  color="error"
+                >
+                  Delete
+                </Button>
+              </ConfirmDialog>
+            </Box>
+          )}
+        </div>
+        <div
+          className={clsx(utilStyles.lightText, "mb-4", "text-right", "pr-8")}
+        >
+          <span className="pr-4">
+            By {post?.author?.name || "Unknown author"}
+          </span>
+          Last Modified: <Date dateString={post.updatedAt} />
+        </div>
+        <Preview markdownInput={post.content} />
+      </article>
+    </Layout>
+  );
+};
 
 export default Post;

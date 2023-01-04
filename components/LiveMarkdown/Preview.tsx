@@ -17,6 +17,7 @@ const MarkDown: React.FC<Props> = ({ markdownInput }) => {
         code: CodeBlock
       }}
       remarkPlugins={[remarkGfm]}
+      className="bg-white p-8"
     >
       {markdownInput}
     </ReactMarkdown>

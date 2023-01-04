@@ -11,7 +11,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       where: { id: postId as string },
     });
     res.json(post);
-  } else if (req.method === 'POST') {
+  } else if (req.method === 'PATCH') {
     const post = await prisma.post.update({
       where: { id: postId as string },
       data: req.body

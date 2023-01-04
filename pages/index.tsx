@@ -1,13 +1,14 @@
+import { useEffect, useState } from 'react';
+import { GetStaticProps } from 'next';
 import Head from 'next/head'
 import Image from 'next/image';
-import Layout, { siteTitle } from '@/components/Layout'
-import utilStyles from '@/styles/utils.module.scss'
-import { IPost } from '@/types/index';
-import Link from 'next/link';
-import { GetStaticProps } from 'next';
-import prisma from '@/lib/prisma';
-import Post from '@/components/Post';
 import { useSession } from 'next-auth/react';
+import Layout, { siteTitle } from '@/components/Layout'
+import Post from '@/components/Post';
+import prisma from '@/lib/prisma';
+import type { IPost } from '@/types/index';
+import type { Session } from 'next-auth';
+import utilStyles from '@/styles/utils.module.scss'
 
 
 // export function getStaticProps() {
@@ -40,6 +41,14 @@ interface Props {
 
 export default function Home({ allPostsData }: Props) {
   const { data, status } = useSession()
+  const [userData, setUserData] = useState<Session['user']>({});
+  useEffect(() => {
+    if(data?.user) {
+      setUserData(data.user)
+      console.log(data.user);
+      
+    }
+  }, [data]);
   return (
     <Layout home>
       <Head>
@@ -53,13 +62,13 @@ export default function Home({ allPostsData }: Props) {
           <>
             <Image
               priority
-              src={data?.user?.image || '/images/avatar.jpg'}
+              src={userData?.image || '/images/avatar.jpg'}
               className={utilStyles.borderCircle}
               height={144}
               width={144}
-              alt={data?.user?.name || ''}
+              alt={userData?.name || ''}
             />
-            <h1 className={utilStyles.heading2Xl}>{`${data?.user?.name}'s Blog`}</h1>
+            <h1 className={utilStyles.heading2Xl}>{`${userData?.name}'s Blog`}</h1>
           </>
         ) : ''}
       </header>
