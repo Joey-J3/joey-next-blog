@@ -1,10 +1,10 @@
 import Head from "next/head";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Button, Box } from "@mui/material";
 import Layout from "@/components/Layout";
 import Date from "@/components/Date";
+import Preview from "@/components/LiveMarkdown/Preview"
 import type { GetServerSideProps } from "next";
 import type { IPost } from "@/types/index";
 import utilStyles from '@/styles/utils.module.scss';
@@ -90,20 +90,21 @@ const Post: React.FC<Props> = ({ post }) => {
   <Head>
     <title>{post.title}</title>
   </Head>
-  <article>
-    <h1 className={utilStyles.headingXl}>{title}</h1>
-    <div className={utilStyles.lightText}>
-      <Date dateString={post.updatedAt} />
-    </div>
-    <p>By {post?.author?.name || 'Unknown author'}</p>
-    <ReactMarkdown>{post.content}</ReactMarkdown>
-    {userHasValidSession && postBelongsToUser && (
+
+  {userHasValidSession && postBelongsToUser && (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         {!post.published && <Button onClick={() => publishPost(post.id)} variant="contained">Publish</Button>}
         <Button onClick={() => Router.push(`/edit/${post.id}`)} variant="outlined" color="primary">Edit</Button>
         <Button onClick={() => deletePost(post.id)} variant="contained" color="error">Delete</Button>
       </Box>
     )}
+  <article>
+    <h1 className={utilStyles.headingXl}>{title}</h1>
+    <div className={utilStyles.lightText}>
+      <Date dateString={post.updatedAt} />
+    </div>
+    <p>By {post?.author?.name || 'Unknown author'}</p>
+    <Preview markdownInput={post.content} />
   </article>
 </Layout>
 }

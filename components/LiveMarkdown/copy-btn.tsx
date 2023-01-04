@@ -11,6 +11,6 @@ export const CopyBtn: React.FC<Props> = ({ children }) => {
     // TODO: show message tips: Copied
   }
   return <span className="text-white absolute right-2 top-2 transition cursor-pointer hover:scale-110">
-    <ContentCopyOutlined onClick={handleClick} color="info" />
+    <ContentCopyOutlined onClick={handleClick} />
   </span>
 }
