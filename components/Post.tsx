@@ -1,6 +1,5 @@
 import React from "react";
 import Router from "next/router";
-import ReactMarkdown from "react-markdown";
 import Date from "@/components/Date";
 import { IPost } from "../types";
 
@@ -12,7 +11,6 @@ const Post: React.FC<{ post: IPost }> = ({ post }) => {
       <h2>{post.title}</h2>
       <Date dateString={post.updatedAt} />
       <small>By {authorName}</small>
-      <ReactMarkdown>{post.content}</ReactMarkdown>
     </div>
   );
 };

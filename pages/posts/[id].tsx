@@ -2,13 +2,13 @@ import Head from "next/head";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import Layout from "@/components/Layout";
-import prisma from '@/lib/prisma';
 import Date from "@/components/Date";
-import utilStyles from '@/styles/utils.module.scss';
-import type { IPost } from "@/types/index";
 import type { GetServerSideProps } from "next";
+import type { IPost } from "@/types/index";
+import utilStyles from '@/styles/utils.module.scss';
+import { getPostByID } from "@/lib/post";
 
 /**
  * Fetch necessary data for the blog post using params.id
@@ -37,16 +37,7 @@ import type { GetServerSideProps } from "next";
 //   };
 // }
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const post = await prisma.post.findUnique({
-    where: {
-      id: String(params?.id),
-    },
-    include: {
-      author: {
-        select: { name: true, email: true },
-      },
-    },
-  });
+  const post = await getPostByID(params?.id as string)
   
   return {
     props: { post },
@@ -106,14 +97,13 @@ const Post: React.FC<Props> = ({ post }) => {
     </div>
     <p>By {post?.author?.name || 'Unknown author'}</p>
     <ReactMarkdown>{post.content}</ReactMarkdown>
-    {!post.published && userHasValidSession && postBelongsToUser && (
-      <Button onClick={() => publishPost(post.id)} variant="contained">Publish</Button>
-    )}
-    {
-      userHasValidSession && postBelongsToUser && (
+    {userHasValidSession && postBelongsToUser && (
+      <Box sx={{ display: 'flex', gap: '1rem' }}>
+        {!post.published && <Button onClick={() => publishPost(post.id)} variant="contained">Publish</Button>}
+        <Button onClick={() => Router.push(`/edit/${post.id}`)} variant="outlined" color="primary">Edit</Button>
         <Button onClick={() => deletePost(post.id)} variant="contained" color="error">Delete</Button>
-      )
-    }
+      </Box>
+    )}
   </article>
 </Layout>
 }

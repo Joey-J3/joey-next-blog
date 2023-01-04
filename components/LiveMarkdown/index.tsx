@@ -1,6 +1,4 @@
-import { MouseEvent, useState } from "react";
 import { Visibility } from "@mui/icons-material";
-import Header from "@/components/Header";
 import styles from './live-markdown.module.scss'
 import Preview from "./Preview";
 

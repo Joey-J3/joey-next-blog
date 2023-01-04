@@ -33,14 +33,4 @@ export const theme = createTheme({
   status: {
     danger: orange[500],
   },
-  palette: {
-    primary: {
-      main: '#ececec',
-      darker: '#053e85',
-    },
-    neutral: {
-      main: '#64748B',
-      contrastText: '#fff',
-    },
-  },
 });

@@ -63,11 +63,6 @@ export default function Home({ allPostsData }: Props) {
           </>
         ) : ''}
       </header>
-      <section className={utilStyles.headingMd}>
-        <p>
-          <Link href={`/draft`}>GO to Live Markdown Editor</Link>
-        </p>
-      </section>
       {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
@@ -83,7 +78,7 @@ export default function Home({ allPostsData }: Props) {
         </ul>
       </section> */}
       <section>
-        <h1>Public Feed</h1>
+        <h1 className="mb-4">Public Feed</h1>
         <main className='flex flex-col gap-8'>
           {allPostsData.map((post) => (
             <div key={post.id}>

@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html'
+import prisma from './prisma';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 /**
@@ -83,4 +84,21 @@ export async function getPostData(id: string) {
     contentHtml,
     ...matterResult.data,
   };
+}
+
+
+// getStaticProps
+export const getPostByID = async (id: string) => {
+  const post = await prisma.post.findUnique({
+    where: {
+      id: String(id),
+    },
+    include: {
+      author: {
+        select: { name: true, email: true },
+      },
+    },
+  });
+  
+  return post;
 }
