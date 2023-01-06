@@ -8,9 +8,9 @@ import Preview from "@/components/LiveMarkdown/Preview";
 import type { GetServerSideProps } from "next";
 import type { IPost } from "@/types/index";
 import utilStyles from "@/styles/utils.module.scss";
-import { getPostByID } from "@/lib/post";
 import clsx from "clsx";
 import ConfirmDialog from "@/components/ComfirmDialog";
+import prisma from "@/lib/prisma";
 
 /**
  * Fetch necessary data for the blog post using params.id
@@ -39,8 +39,22 @@ import ConfirmDialog from "@/components/ComfirmDialog";
 //   };
 // }
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const post = await getPostByID(params?.id as string);
-
+  console.info('Getting Post By ID.')
+  let post = null
+  try {
+    post = await prisma.post.findUnique({
+      where: {
+        id: String(params?.id as string),
+      },
+      include: {
+        author: {
+          select: { name: true, email: true },
+        },
+      },
+    });
+  } catch (error) {
+    throw new Error(String(error))
+  }
   return {
     props: { post },
   };
@@ -80,6 +94,9 @@ const Post: React.FC<Props> = ({ post }) => {
   const { data: session, status } = useSession();
   if (status === "loading") {
     return <div>Authenticating ...</div>;
+  }
+  if (!post) {
+    return <div>Not Found!</div>
   }
   const userHasValidSession = Boolean(session);
   const postBelongsToUser = session?.user?.email === post?.author?.email;

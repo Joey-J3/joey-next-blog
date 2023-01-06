@@ -3,15 +3,30 @@ import Draft from "@/components/Draft";
 import { EditPostAPIReqBody, IPost } from "@/types/index";
 import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
-import { getPostByID } from "@/lib/post";
+import prisma from "@/lib/prisma";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const post = await getPostByID(params?.id as string)
-  
+  console.info('Getting Post By ID.')
+  let post = null
+  try {
+    post = await prisma.post.findUnique({
+      where: {
+        id: String(params?.id as string),
+      },
+      include: {
+        author: {
+          select: { name: true, email: true },
+        },
+      },
+    });
+  } catch (error) {
+    throw new Error(String(error))
+  }
   return {
     props: { post },
   };
 };
+
 
 const Edit: React.FC<{ post: IPost }> = ({ post }) => {
   const [ID, setID] = useState("");
