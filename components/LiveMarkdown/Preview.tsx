@@ -1,7 +1,9 @@
+import clsx from "clsx";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import remarkGfm from "remark-gfm";
 import CodeBlock from "./CodeBlock"
 import { CopyBtn } from "./copy-btn";
+import styles from './preview.module.scss'
 
 interface Props {
   markdownInput: string;
@@ -17,7 +19,7 @@ const MarkDown: React.FC<Props> = ({ markdownInput }) => {
         code: CodeBlock
       }}
       remarkPlugins={[remarkGfm]}
-      className="bg-white p-8"
+      className={clsx(styles['md-body'], 'bg-white', 'p-8')}
     >
       {markdownInput}
     </ReactMarkdown>

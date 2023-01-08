@@ -77,14 +77,13 @@
     --card-border-rgb: 200, 200, 200;
   }
 }
-
 * {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 html,
 body {
+  margin: 0;
+  padding: 0;
   max-width: 100vw;
   overflow-x: hidden;
   min-height: 100vh;
@@ -108,9 +107,4 @@ a {
   html {
     color-scheme: dark;
   }
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-size: revert;
-  font-weight: revert;
 }
