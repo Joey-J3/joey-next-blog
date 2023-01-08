@@ -1,16 +1,16 @@
 import Head from "next/head";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { Button, Box } from "@mui/material";
 import Layout from "@/components/Layout";
 import Date from "@/components/Date";
 import Preview from "@/components/LiveMarkdown/Preview";
-import type { GetServerSideProps } from "next";
 import type { IPost } from "@/types/index";
 import utilStyles from "@/styles/utils.module.scss";
 import clsx from "clsx";
 import ConfirmDialog from "@/components/ComfirmDialog";
-import prisma from "@/lib/prisma";
+import { useEffect, useState } from "react";
+import { deletePost, getPost, publishPost } from "api/post";
 
 /**
  * Fetch necessary data for the blog post using params.id
@@ -38,41 +38,27 @@ import prisma from "@/lib/prisma";
 //     props: post,
 //   };
 // }
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  console.info('Getting Post By ID.')
-  let post = null
-  try {
-    post = await prisma.post.findUnique({
-      where: {
-        id: String(params?.id as string),
-      },
-      include: {
-        author: {
-          select: { name: true, email: true },
-        },
-      },
-    });
-  } catch (error) {
-    throw new Error(String(error))
-  }
-  return {
-    props: { post },
-  };
-};
-
-async function publishPost(id: string): Promise<void> {
-  await fetch(`/api/publish/${id}`, {
-    method: "PUT",
-  });
-  await Router.push("/");
-}
-
-async function deletePost(id: string): Promise<void> {
-  await fetch(`/api/post/${id}`, {
-    method: "DELETE",
-  });
-  Router.push("/");
-}
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//   console.info('Getting Post By ID.')
+//   let post = null
+//   try {
+//     post = await prisma.post.findUnique({
+//       where: {
+//         id: String(params?.id as string),
+//       },
+//       include: {
+//         author: {
+//           select: { name: true, email: true },
+//         },
+//       },
+//     });
+//   } catch (error) {
+//     throw new Error(String(error))
+//   }
+//   return {
+//     props: { post },
+//   };
+// };
 
 /**
  * Return a list of possible value for id
@@ -90,10 +76,26 @@ interface Props {
   post: IPost;
 }
 
-const Post: React.FC<Props> = ({ post }) => {
+const Post: React.FC = () => {
   const { data: session, status } = useSession();
+  const [post, setPost] = useState<IPost | null>(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter()
+  useEffect(() => {
+    if (router.query.id) {
+      setLoading(true)
+      getPost(router.query.id as string).then(post => setPost(post)).finally(() => setLoading(false))
+    }
+  }, [router.query.id]);
+  useEffect(() => {
+    console.log(post);
+    
+  }, [post]);
   if (status === "loading") {
     return <div>Authenticating ...</div>;
+  }
+  if (loading) {
+    return <div>Loading...</div>
   }
   if (!post) {
     return <div>Not Found!</div>

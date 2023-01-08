@@ -17,9 +17,21 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       data: req.body
     })
     res.json(post)
+  } else if (req.method === 'GET') {
+    const post = await prisma.post.findUnique({
+      where: {
+        id: String(postId as string),
+      },
+      include: {
+        author: {
+          select: { name: true, email: true },
+        },
+      },
+    });
+    res.json({
+      data: post
+    })
   } else {
-    throw new Error(
-      `The HTTP ${req.method} method is not supported at this route.`,
-    );
+    res.status(500).json({ message: `The HTTP ${req.method} method is not supported at this route.`})
   }
 }
