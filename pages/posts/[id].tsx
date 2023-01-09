@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Router, { useRouter } from "next/router";
+import Router from "next/router";
 import { useSession } from "next-auth/react";
 import { Button, Box } from "@mui/material";
 import Layout from "@/components/Layout";
@@ -9,8 +9,9 @@ import type { IPost } from "@/types/index";
 import utilStyles from "@/styles/utils.module.scss";
 import clsx from "clsx";
 import ConfirmDialog from "@/components/ComfirmDialog";
-import { useEffect, useState } from "react";
-import { deletePost, getPost, publishPost } from "api/post";
+import { deletePost, publishPost } from "api/post";
+import { GetServerSideProps } from "next";
+import prisma from "@/lib/prisma";
 
 /**
  * Fetch necessary data for the blog post using params.id
@@ -38,27 +39,26 @@ import { deletePost, getPost, publishPost } from "api/post";
 //     props: post,
 //   };
 // }
-// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-//   console.info('Getting Post By ID.')
-//   let post = null
-//   try {
-//     post = await prisma.post.findUnique({
-//       where: {
-//         id: String(params?.id as string),
-//       },
-//       include: {
-//         author: {
-//           select: { name: true, email: true },
-//         },
-//       },
-//     });
-//   } catch (error) {
-//     throw new Error(String(error))
-//   }
-//   return {
-//     props: { post },
-//   };
-// };
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  let post = null
+  try {
+    post = await prisma.post.findUnique({
+      where: {
+        id: String(params?.id as string),
+      },
+      include: {
+        author: {
+          select: { name: true, email: true },
+        },
+      },
+    });
+  } catch (error) {
+    throw new Error(String(error))
+  }
+  return {
+    props: { post },
+  };
+};
 
 /**
  * Return a list of possible value for id
@@ -76,41 +76,40 @@ interface Props {
   post: IPost;
 }
 
-const Post: React.FC = () => {
+const Post: React.FC<Props> = ({ post }) => {
   const { data: session, status } = useSession();
-  const [post, setPost] = useState<IPost | null>(null);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter()
-  useEffect(() => {
-    if (router.query.id) {
-      setLoading(true)
-      getPost(router.query.id as string).then(post => setPost(post)).finally(() => setLoading(false))
-    }
-  }, [router.query.id]);
-  useEffect(() => {
-    console.log(post);
-    
-  }, [post]);
   if (status === "loading") {
     return <div>Authenticating ...</div>;
-  }
-  if (loading) {
-    return <div>Loading...</div>
   }
   if (!post) {
     return <div>Not Found!</div>
   }
   const userHasValidSession = Boolean(session);
   const postBelongsToUser = session?.user?.email === post?.author?.email;
-  let title = post.title;
-  if (!post.published) {
+  let title = post?.title;
+  if (!post?.published) {
     title = `${title} (Draft)`;
   }
 
+  const onClickPublish = async () => {
+    try {
+      await publishPost(post.id)
+    } catch (error) {
+      console.error('Publish Post Fail with error:', error);
+    }
+  }
+
+  const onClickDelete = async () => {
+    try {
+      await deletePost(post.id)
+    } catch (error) {
+      console.error('Delete Post Fail with error:', error);
+    }
+  }
   return (
     <Layout className={["bg-gray-100", "p-8"]}>
       <Head>
-        <title>{post.title}</title>
+        <title>{title}</title>
       </Head>
 
       <article className="bg-white px-8">
@@ -121,7 +120,7 @@ const Post: React.FC = () => {
             <Box sx={{ display: "flex", gap: "1rem" }}>
               {!post.published && (
                 <Button
-                  onClick={() => publishPost(post.id)}
+                  onClick={() => onClickPublish()}
                   variant="contained"
                 >
                   Publish
@@ -136,7 +135,7 @@ const Post: React.FC = () => {
               </Button>
               <ConfirmDialog
                 content={"Are you sure to delete this post?"}
-                onSubmit={() => deletePost(post.id)}
+                onSubmit={() => onClickDelete()}
               >
                 <Button
                   variant="contained"
