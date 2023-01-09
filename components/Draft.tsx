@@ -9,7 +9,10 @@ import LiveMarkdown from "./LiveMarkdown";
 interface Props {
   isEdit?: boolean;
   post?: IPost;
-  onSubmit: (data: EditPostAPIReqBody | CreatePostAPIReqBody, e: React.SyntheticEvent) => Promise<void>;
+  onSubmit: (
+    data: EditPostAPIReqBody | CreatePostAPIReqBody,
+    e: React.SyntheticEvent
+  ) => Promise<void>;
 }
 
 const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
@@ -20,7 +23,7 @@ const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
     e.preventDefault();
     try {
       const body = { title, content };
-      await onSubmit(body, e)
+      await onSubmit(body, e);
     } catch (error) {
       console.error(error);
     }
@@ -28,8 +31,8 @@ const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
 
   useEffect(() => {
     if (post) {
-      setTitle(post?.title)
-      setContent(post?.content)
+      setTitle(post?.title);
+      setContent(post?.content);
     }
   }, [post]);
 
@@ -43,7 +46,13 @@ const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
         autoComplete="off"
         className="w-full"
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <h1>{title || "New Draft"}</h1>
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <Button
@@ -52,9 +61,13 @@ const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
               type="submit"
               color="primary"
             >
-              { isEdit ? "Save" : "Create" }
+              {isEdit ? "Save" : "Create"}
             </Button>
-            <Button variant="outlined" type="reset" onClick={() => Router.back() }>
+            <Button
+              variant="outlined"
+              type="reset"
+              onClick={() => Router.back()}
+            >
               Cancel
             </Button>
           </Box>
@@ -74,6 +87,6 @@ const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
       </Box>
     </Layout>
   );
-}
- 
+};
+
 export default Draft;

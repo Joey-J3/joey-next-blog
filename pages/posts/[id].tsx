@@ -113,7 +113,7 @@ const Post: React.FC = () => {
         <title>{post.title}</title>
       </Head>
 
-      <article className="bg-white">
+      <article className="bg-white px-8">
         <div className="flex justify-between items-center px-8">
           <h1 className={clsx(utilStyles.headingXl)}>{title}</h1>
 
