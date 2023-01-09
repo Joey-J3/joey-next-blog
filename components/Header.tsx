@@ -43,7 +43,7 @@ const Header: React.FC = () => {
 
   if (!session) {
     right = (
-      <div className="mr-auto">
+      <div>
         <Link href="/api/auth/signin" legacyBehavior>
           <a className='no-underline inline-block ml-4 border border-solid px-4 py-2 rounded' data-active={isActive('/signup')}>Log in</a>
         </Link>
