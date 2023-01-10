@@ -1,4 +1,5 @@
 import Close from "@mui/icons-material/Close";
+import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -12,11 +13,22 @@ import { useState } from "react";
 interface Props {
   children: JSX.Element;
   content?: JSX.Element | string;
-  onSubmit: () => void;
+  onSubmit: () => Promise<void>;
 }
 
 const ConfirmDialog: React.FC<Props> = ({ children, onSubmit, content }) => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const onConfirm = async () => {
+    try {
+      setLoading(true)
+      await onSubmit()
+    } catch (error) {
+      throw new Error(`[ConfirmDialog]: Submit callback error: ${error}`)
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <>
       <span onClick={() => setVisible(true)}>{children}</span>
@@ -34,8 +46,8 @@ const ConfirmDialog: React.FC<Props> = ({ children, onSubmit, content }) => {
           <Button color="primary" variant="outlined" onClick={() => setVisible(false)}>
             Cancel
           </Button>
-          <Button color="primary" variant="contained" onClick={() => onSubmit()}>
-            Confirm
+          <Button color="primary" variant="contained" onClick={() => onConfirm()}>
+            {loading ? <CircularProgress color="inherit" size={20} /> : 'Confirm'}
           </Button>
         </DialogActions>
       </Dialog>
