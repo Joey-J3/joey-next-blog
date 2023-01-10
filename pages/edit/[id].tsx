@@ -2,23 +2,19 @@ import Router from "next/router";
 import Draft from "@/components/Draft";
 import { EditPostAPIReqBody, IPost } from "@/types/index";
 import { GetServerSideProps } from "next";
-import prisma from "@/lib/prisma";
+import { getPostByID } from "@/lib/post";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   let post = null
   try {
-    post = await prisma.post.findUnique({
-      where: {
-        id: String(params?.id as string),
-      },
-      include: {
-        author: {
-          select: { name: true, email: true },
-        },
-      },
-    });
+    post = await getPostByID(params?.id as string)
   } catch (error) {
     throw new Error(String(error))
+  }
+  if (!post) {
+    return {
+      notFound: true,
+    }
   }
   return {
     props: { post },

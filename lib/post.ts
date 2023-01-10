@@ -87,7 +87,6 @@ export async function getPostData(id: string) {
 }
 
 
-// getStaticProps
 export const getPostByID = async (id: string) => {
   const post = await prisma.post.findUnique({
     where: {

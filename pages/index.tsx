@@ -45,8 +45,6 @@ export default function Home({ allPostsData }: Props) {
   useEffect(() => {
     if(data?.user) {
       setUserData(data.user)
-      console.log(data.user);
-      
     }
   }, [data]);
   return (

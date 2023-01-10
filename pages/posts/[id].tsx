@@ -11,7 +11,7 @@ import clsx from "clsx";
 import ConfirmDialog from "@/components/ComfirmDialog";
 import { deletePost, publishPost } from "api/post";
 import { GetServerSideProps } from "next";
-import prisma from "@/lib/prisma";
+import { getPostByID } from "@/lib/post";
 
 /**
  * Fetch necessary data for the blog post using params.id
@@ -42,18 +42,14 @@ import prisma from "@/lib/prisma";
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   let post = null
   try {
-    post = await prisma.post.findUnique({
-      where: {
-        id: String(params?.id as string),
-      },
-      include: {
-        author: {
-          select: { name: true, email: true },
-        },
-      },
-    });
+    post = await getPostByID(params?.id as string)
   } catch (error) {
     throw new Error(String(error))
+  }
+  if (!post) {
+    return {
+      notFound: true,
+    }
   }
   return {
     props: { post },
@@ -80,9 +76,6 @@ const Post: React.FC<Props> = ({ post }) => {
   const { data: session, status } = useSession();
   if (status === "loading") {
     return <div>Authenticating ...</div>;
-  }
-  if (!post) {
-    return <div>Not Found!</div>
   }
   const userHasValidSession = Boolean(session);
   const postBelongsToUser = session?.user?.email === post?.author?.email;
