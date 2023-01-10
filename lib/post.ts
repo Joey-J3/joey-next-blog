@@ -86,12 +86,18 @@ export async function getPostData(id: string) {
   };
 }
 
-export const baseUrl = process.env.BASE_URL
-
 
 export const getPostByID = async (id: string) => {
-  const res = await fetch(`${baseUrl}/api/post/${id}`, {
-    method: 'GET'
-  }).then(response => response.json())
-  return res.data;
+  const post = await prisma.post.findUnique({
+    where: {
+      id: String(id),
+    },
+    include: {
+      author: {
+        select: { name: true, email: true },
+      },
+    },
+  });
+  
+  return post;
 }

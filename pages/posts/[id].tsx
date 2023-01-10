@@ -1,17 +1,18 @@
 import Head from "next/head";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
-import { Button, Box } from "@mui/material";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import clsx from "clsx";
+import ConfirmDialog from "@/components/ComfirmDialog";
 import Layout from "@/components/Layout";
 import Date from "@/components/Date";
 import Preview from "@/components/LiveMarkdown/Preview";
-import type { IPost } from "@/types/index";
 import utilStyles from "@/styles/utils.module.scss";
-import clsx from "clsx";
-import ConfirmDialog from "@/components/ComfirmDialog";
 import { deletePost, publishPost } from "api/post";
-import { GetServerSideProps } from "next";
 import { getPostByID } from "@/lib/post";
+import type { IPost } from "@/types/index";
+import type { GetServerSideProps } from "next";
 
 /**
  * Fetch necessary data for the blog post using params.id

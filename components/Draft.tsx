@@ -1,10 +1,11 @@
-import { Button, TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/system/Box";
 import { useEffect, useState } from "react";
 import Router from "next/router";
-import { Box } from "@mui/system";
-import { CreatePostAPIReqBody, EditPostAPIReqBody, IPost } from "@/types/index";
 import Layout from "./Layout";
 import LiveMarkdown from "./LiveMarkdown";
+import type { CreatePostAPIReqBody, EditPostAPIReqBody, IPost } from "@/types/index";
 
 interface Props {
   isEdit?: boolean;
@@ -78,7 +79,7 @@ const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
           placeholder="Title"
           type="text"
           value={title}
-          className="w-full p-2 my-2 rounded border-2 border-solid"
+          className="w-full p-2 my-2 rounded"
         />
         <LiveMarkdown
           markdownInput={content}

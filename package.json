@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "ANALYZE=true yarn build"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "@types/nprogress": "^0.2.0",
+    "@next/bundle-analyzer": "^13.1.1",
     "@types/react-syntax-highlighter": "^15.5.5",
     "@types/uuid": "^9.0.0",
     "autoprefixer": "^10.4.13",

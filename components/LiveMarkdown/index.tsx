@@ -1,4 +1,4 @@
-import { Visibility } from "@mui/icons-material";
+import Visibility from "@mui/icons-material/Visibility";
 import styles from './live-markdown.module.scss'
 import Preview from "./Preview";
 

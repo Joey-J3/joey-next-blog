@@ -1,5 +1,5 @@
 import Router from "next/router";
-import { IPost } from "@/types/index";
+import type { IPost } from "@/types/index";
 
 export async function getPost(id: string): Promise<IPost> {
   const post = await fetch(`/api/post/${id}`, {

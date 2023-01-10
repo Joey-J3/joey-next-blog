@@ -1,4 +1,4 @@
-import { ContentCopyOutlined } from "@mui/icons-material"
+import ContentCopyOutlined from "@mui/icons-material/ContentCopyOutlined"
 import { Children, SyntheticEvent } from "react"
 
 interface Props {

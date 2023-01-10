@@ -1,8 +1,8 @@
 import Router from "next/router";
 import Draft from "@/components/Draft";
-import { EditPostAPIReqBody, IPost } from "@/types/index";
-import { GetServerSideProps } from "next";
 import { getPostByID } from "@/lib/post";
+import type { EditPostAPIReqBody, IPost } from "@/types/index";
+import type { GetServerSideProps } from "next";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   let post = null
@@ -21,8 +21,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   };
 };
 
+interface Props {
+  post: IPost
+}
 
-const Edit: React.FC<{ post: IPost }> = ({ post }) => {
+
+const Edit: React.FC<Props> = ({ post }) => {
   const submitData = async (data: EditPostAPIReqBody) => {
     try {
       await fetch(`/api/post/${post?.id}`, {
