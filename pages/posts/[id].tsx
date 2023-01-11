@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import clsx from "clsx";
+import nProgress from "nprogress";
 import ConfirmDialog from "@/components/ComfirmDialog";
 import Layout from "@/components/Layout";
 import Date from "@/components/Date";
@@ -86,18 +87,26 @@ const Post: React.FC<Props> = ({ post }) => {
   }
 
   const onClickPublish = async () => {
+    const ng = nProgress.start()
     try {
       await publishPost(post.id)
+      ng.done()
+      await Router.push("/");
     } catch (error) {
       console.error('Publish Post Fail with error:', error);
+      ng.done()
     }
   }
 
   const onClickDelete = async () => {
+    const ng = nProgress.start()
     try {
       await deletePost(post.id)
+      ng.done()
+      await Router.push("/");
     } catch (error) {
       console.error('Delete Post Fail with error:', error);
+      ng.done()
     }
   }
   return (
