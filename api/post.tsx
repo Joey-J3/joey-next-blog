@@ -1,6 +1,6 @@
 import type { IPost } from "@/types/index";
 
-export async function getPost(id: string): Promise<IPost> {
+export async function getPostByID(id: string): Promise<IPost> {
   const post = await fetch(`/api/post/${id}`, {
     method: "GET",
   }).then(res => res.json())
@@ -17,4 +17,10 @@ export async function deletePost(id: string): Promise<void> {
   await fetch(`/api/post/${id}`, {
     method: "DELETE",
   });
+}
+
+export async function getPosts(params: Partial<IPost>): Promise<IPost[]> {
+  return await fetch(`/api/post/query?title=${params.title}`, {
+    method: "GET",
+  }).then(res => res.json())
 }

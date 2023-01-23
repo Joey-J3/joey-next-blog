@@ -90,14 +90,14 @@ const Header: React.FC = () => {
             <span className="text-gray-900">New post</span>
           </Button>
         </Link>
-        <Button variant="text" onClick={() => signOut()}><span className="text-gray-900">Log out</span></Button>
+        <Button variant="text" onClick={() => signOut()}>Log out</Button>
       </div>
     );
   }
 
   return (
     <>
-      <nav className='flex p-4 items-center justify-between fixed top-0 left-0 right-0 bg-white z-50'>
+      <nav className='flex p-4 items-center justify-between fixed top-0 left-0 right-0 bg-gray-900 z-50'>
         {left}
         {right}
       </nav>

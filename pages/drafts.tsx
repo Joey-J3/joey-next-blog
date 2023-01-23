@@ -51,7 +51,7 @@ const Drafts: React.FC<Props> = (props) => {
   return (
     <Layout>
       <h1>My Drafts</h1>
-      <main className="flex flex-col gap-8">
+      <main className="flex flex-col gap-8 bg-slate-100 p-4 shadow-2xl rounded-2xl">
         {props.drafts.map((post) => (
           <div
             key={post.id}

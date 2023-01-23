@@ -19,7 +19,7 @@ export const siteTitle = "Joey Blog";
 function Layout({ children, className = [] }: LayoutProps) {
   return (
     <ThemeProvider theme={theme}>
-      <div className={clsx(["w-full mb-24 pl-8 pr-8", inter.className, ...className])}>
+      <div className={clsx(["bg-[#0f172a] w-full mb-24 pl-8 pr-8", inter.className, ...className])}>
         <Head>
           <link rel="icon" href="/favicon.ico" />
           <meta

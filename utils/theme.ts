@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme, Palette } from "@mui/material";
 import { orange } from "@mui/material/colors";
 
 declare module '@mui/material/styles' {
@@ -6,13 +6,7 @@ declare module '@mui/material/styles' {
     status: {
       danger: string;
     };
-  }
-  interface Palette {
-    neutral: Palette['primary'];
-  }
-
-  interface PaletteOptions {
-    neutral: PaletteOptions['primary'];
+    palette: Palette;
   }
 
   interface PaletteColor {
@@ -33,4 +27,39 @@ export const theme = createTheme({
   status: {
     danger: orange[500],
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        containedPrimary: {
+          backgroundColor: '#0ea5ea',
+          ":hover": {
+            backgroundColor: '#0bd1d1'
+          }
+        },
+        textPrimary: {
+          color: "#fff",
+          fontWeight: 'bold'
+        },
+        outlinedPrimary: {
+          borderColor: '#0ea5ea',
+          backgroundColor: '#fff',
+          ":hover": {
+            borderColor: '#0bd1d1',
+            backgroundColor: 'rgba(11, 209, 209)'
+          }
+        }
+      }
+    }
+  },
+  palette: {
+    text: {
+      primary: 'rgba(148, 169, 201, 1)',
+      secondary: 'rgba(148, 169, 201, 0.7)',
+      disabled: 'rgba(148, 169, 201, 0.5)',
+    },
+    background: {
+      paper: '#0f172a',
+      default: '#0f172a'
+    }
+  }
 });

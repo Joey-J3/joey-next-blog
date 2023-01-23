@@ -10,8 +10,8 @@ export type IPost = {
   id: string;
   title: string;
   author: {
-    name: string;
-    email: string;
+    name: string | null;
+    email: string | null;
   } | null;
   content: string;
   published: boolean;
