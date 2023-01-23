@@ -8,7 +8,7 @@ import prisma from '@/lib/prisma';
 import utilStyles from '@/styles/utils.module.scss'
 import CircularProgress from '@mui/material/CircularProgress';
 import SearchGroup from '@/components/SearchGroup';
-import { getPosts } from 'api/post';
+import { getPosts } from 'common/api/post';
 import type { IPost } from '@/types/index';
 import type { Session } from 'next-auth';
 import type { GetStaticProps } from 'next';

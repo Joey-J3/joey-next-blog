@@ -10,7 +10,7 @@ import Layout from "@/components/Layout";
 import Date from "@/components/Date";
 import Preview from "@/components/LiveMarkdown/Preview";
 import utilStyles from "@/styles/utils.module.scss";
-import { deletePost, publishPost } from "api/post";
+import { deletePost, publishPost } from "common/api/post";
 import { getPostByID } from "@/lib/post";
 import type { IPost } from "@/types/index";
 import type { GetServerSideProps } from "next";
