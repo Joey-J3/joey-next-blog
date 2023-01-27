@@ -19,7 +19,7 @@ const MarkDown: React.FC<Props> = ({ markdownInput }) => {
         code: CodeBlock
       }}
       remarkPlugins={[remarkGfm]}
-      className={clsx(styles['md-body'], 'bg-white', 'p-8')}
+      className={clsx(styles['md-body'], 'p-8')}
     >
       {markdownInput}
     </ReactMarkdown>
