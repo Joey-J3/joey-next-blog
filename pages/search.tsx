@@ -1,5 +1,5 @@
 import {  useEffect, useState } from "react";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -12,12 +12,35 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { getPosts } from "common/api/post";
 import { getUsers } from "common/api/user";
 import utilStyles from '@/styles/utils.module.scss'
+import prisma from "@/lib/prisma";
+import EmptyState from "@/components/EmptyState";
 
-// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-//   return {
-//     props: {}
-//   }
-// }
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const postList = await prisma.post.findMany({
+    where: {
+      title: { contains: (query.searchText || "") as string, mode: 'insensitive' },
+      published: true,
+    },
+    orderBy: {
+      updatedAt: 'desc'
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true
+        },
+      },
+    },
+    take: 20,
+  });
+  return {
+    props: {
+      data: postList,
+      query
+    }
+  }
+}
 
 interface Props {
   query: { [key: string]: any };
@@ -38,7 +61,7 @@ const searchStrategy = new Map<number, { key: string; executor: Function }>([
 const Search: NextPage<Props> = function ({ query, data }) {
   const [searchText, setSearchText] = useState(query.searchText as string);
   const [tabValue, setTabValue] = useState(0);
-  const [list, setList] = useState(data);
+  const [list, setList] = useState(data || []);
   const [loading, setLoading] = useState(false);
   const onSearch = async () => {
     setLoading(true);
@@ -87,7 +110,7 @@ const Search: NextPage<Props> = function ({ query, data }) {
                     <CircularProgress />
                   </div>
                 ) : (
-                  list.map((user) => (
+                  list.length ? list.map((user) => (
                     <div key={user.id}>
                       <Link
                         href={`/user/${user.id}`}
@@ -107,7 +130,7 @@ const Search: NextPage<Props> = function ({ query, data }) {
                         </div>
                       </Link>
                     </div>
-                  ))
+                  )) : <EmptyState />
                 )}
               </main>
             </TabPanel>
@@ -116,14 +139,6 @@ const Search: NextPage<Props> = function ({ query, data }) {
       </section>
     </Layout>
   );
-};
-
-Search.getInitialProps = async ({ query }) => {
-  const postList = await getPosts({ title: query.searchText as string });
-  return {
-    data: postList,
-    query,
-  };
 };
 
 export default Search;
