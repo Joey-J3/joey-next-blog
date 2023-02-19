@@ -1,4 +1,4 @@
-import { SearchSharp } from "@mui/icons-material"
+import SearchSharp from "@mui/icons-material/SearchSharp"
 import Typography from "@mui/material/Typography"
 
 const EmptyState: React.FC = () => {
