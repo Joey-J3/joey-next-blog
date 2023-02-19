@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useCallback, useRef, MutableRefObject } from "react";
+import { useEffect, useReducer, useCallback, MutableRefObject } from "react";
 import debounce from "lodash/debounce";
 
 const INTERSECTION_THRESHOLD = 5;

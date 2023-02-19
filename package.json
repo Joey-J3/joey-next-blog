@@ -27,6 +27,7 @@
     "eslint": "8.30.0",
     "eslint-config-next": "13.0.7",
     "gray-matter": "^4.0.3",
+    "lodash": "^4.17.21",
     "next": "13.0.7",
     "next-auth": "^4.18.7",
     "next-superjson-plugin": "^0.5.2",
@@ -42,8 +43,9 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/nprogress": "^0.2.0",
     "@next/bundle-analyzer": "^13.1.1",
+    "@types/lodash": "^4.14.191",
+    "@types/nprogress": "^0.2.0",
     "@types/react-syntax-highlighter": "^15.5.5",
     "@types/uuid": "^9.0.0",
     "autoprefixer": "^10.4.13",
