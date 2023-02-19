@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head'
 import Image from 'next/image';
+import Router from 'next/router';
 import { useSession } from 'next-auth/react';
 import Layout, { siteTitle } from '@/components/Layout'
 import Post from '@/components/Post';
 import prisma from '@/lib/prisma';
 import utilStyles from '@/styles/utils.module.scss'
 import CircularProgress from '@mui/material/CircularProgress';
+import Card from '@/components/Card';
 import SearchGroup from '@/components/SearchGroup';
-import { getPosts } from 'common/api/post';
 import type { IPost } from '@/types/index';
 import type { Session } from 'next-auth';
 import type { GetStaticProps } from 'next';
@@ -32,8 +33,12 @@ export const getStaticProps: GetStaticProps = async () => {
       },
     },
   });
+  // get published post total
+  const publishedPosts = await prisma.post.count({
+    where: { published: true },
+  });
   return {
-    props: { allPostsData },
+    props: { allPostsData, total: publishedPosts },
     revalidate: 10,
   };
 };
@@ -49,10 +54,10 @@ export default function Home({ allPostsData }: Props) {
   const [postList, setPostList] = useState<IPost[]>([]);
   const [loading, setLoading] = useState(false);
   const onSearch = async () => {
-    setLoading(true)
-    const data = await getPosts({ title: searchText })
-    setLoading(false)
-    setPostList(data)
+    await Router.push({
+      pathname: 'search',
+      query: { searchText }
+    })
   }
   useEffect(() => {
     if(data?.user) {
@@ -70,7 +75,7 @@ export default function Home({ allPostsData }: Props) {
         <title>{siteTitle}</title>
       </Head>
 
-      <header className="flex flex-col items-center">
+      {/* <header className="flex flex-col items-center">
         { status === 'loading' ? (
           'Loading...'
         ) : status === 'authenticated' ? (
@@ -86,7 +91,7 @@ export default function Home({ allPostsData }: Props) {
             <h1 className={utilStyles.heading2Xl}>{`${userData?.name}'s Blog`}</h1>
           </>
         ) : ''}
-      </header>
+      </header> */}
       <section className='my-2'>
         <SearchGroup value={searchText} onChange={(value) => setSearchText(value)} onClick={() => onSearch()} />
       </section>
@@ -104,19 +109,47 @@ export default function Home({ allPostsData }: Props) {
           ))}
         </ul>
       </section> */}
-      <section className='bg-slate-100 p-4 shadow-2xl rounded-2xl'>
-        <h1 className="mb-4 text-[#0f172a]">Public Feed</h1>
-        <main className='flex flex-col gap-8'>
-          {loading ? (
-            <div className='w-full flex items-center justify-center h-48'>
-              <CircularProgress />
-            </div>
-          ) :  postList.map((post) => (
-            <div key={post.id}>
-              <Post post={post} />
-            </div>
-          ))}
-        </main>
+      <section className='flex flex-row flex-nowrap w-full gap-4'>
+        <div className='flex-[3]'>
+        <Card>
+          <>
+          <h1 className="mb-4 text-[#0f172a]">Public Feed</h1>
+          <main className='flex flex-col gap-8'>
+            {loading ? (
+              <div className='w-full flex items-center justify-center h-48'>
+                <CircularProgress />
+              </div>
+            ) :  postList.map((post) => (
+              <div key={post.id}>
+                <Post post={post} />
+              </div>
+            ))}
+          </main>
+          </>
+        </Card>
+        </div>
+        <div className="flex-1">
+        <Card>
+          <div className="flex flex-col items-center gap-2 min-h-[4em]">
+          { status === 'loading' ? (
+          <div>Loading...</div>
+        ) : status === 'authenticated' ? (
+          <>
+            <p className="text-lg">个人信息</p>
+            <Image
+              priority
+              src={userData?.image || '/images/avatar.jpg'}
+              className={utilStyles.borderCircle}
+              height={144}
+              width={144}
+              alt={userData?.name || ''}
+            />
+            <h1 className="text-xl">{`${userData?.name}'s Blog`}</h1>
+          </>
+        ) : null}
+          </div>
+        </Card>
+        </div>
       </section>
     </Layout>
   )

@@ -10,10 +10,10 @@ interface Props {
 
 const SearchGroup: React.FC<Props> = ({ value, onChange, onClick }) => {
   return (
-    <div className="flex items-center justify-center">
+    <>
       <TextField value={value} onChange={(e) => onChange(e.target.value, e)} type="text" placeholder="Please type the title." inputProps={{ style: { paddingTop: 8, paddingBottom: 8 }}} />
       <Button onClick={onClick} color="primary" variant="contained" className="ml-2">Search</Button>
-    </div>
+    </>
   )
 }
 

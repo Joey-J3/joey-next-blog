@@ -6,6 +6,13 @@
 //   contentHtml: string;
 // }
 
+export type IUser = {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+}
+
 export type IPost = {
   id: string;
   title: string;
@@ -21,3 +28,8 @@ export type IPost = {
 
 export type CreatePostAPIReqBody = { title: IPost['title']; content: IPost['content'] }
 export type EditPostAPIReqBody = CreatePostAPIReqBody
+
+export type PageInfo = {
+  pageNum: number;
+  pageSize: number;
+}

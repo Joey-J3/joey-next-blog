@@ -86,7 +86,11 @@ export async function getPostData(id: string) {
   };
 }
 
-
+/**
+ * Get post data by its id
+ * @param {string} id post id
+ * @returns {IPost}
+ */
 export const getPostByID = async (id: string) => {
   const post = await prisma.post.findUnique({
     where: {
