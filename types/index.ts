@@ -27,7 +27,7 @@ export type IPost = {
   updatedAt: string;
 }
 
-export type CreatePostAPIReqBody = { title: IPost['title']; content: IPost['content'] }
+export type CreatePostAPIReqBody = { title: IPost['title']; content: IPost['content']; slug: IPost['slug'] }
 export type EditPostAPIReqBody = CreatePostAPIReqBody
 
 export type PageInfo = {
