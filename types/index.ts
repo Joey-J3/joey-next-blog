@@ -21,6 +21,7 @@ export type IPost = {
     email: string | null;
   } | null;
   content: string;
+  slug: string;
   published: boolean;
   createdAt: string;
   updatedAt: string;

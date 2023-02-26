@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "analyze": "ANALYZE=true yarn build"
+    "analyze": "ANALYZE=true yarn build",
+    "schema_format": "prisma format",
+    "schema_deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -53,5 +55,8 @@
     "prisma": "^4.8.0",
     "sass": "^1.57.0",
     "tailwindcss": "^3.2.4"
+  },
+  "prisma": {
+    "schema": "db/schema.prisma"
   }
 }

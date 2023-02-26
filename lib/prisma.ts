@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaClientOptions, } from '@prisma/client/runtime';
+import { PrismaClientOptions } from '@prisma/client/runtime';
 
 let prisma: PrismaClient<PrismaClientOptions, 'query' | 'info' | 'warn' | 'error'>;
 

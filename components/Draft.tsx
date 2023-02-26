@@ -6,6 +6,7 @@ import Router from "next/router";
 import Layout from "./Layout";
 import LiveMarkdown from "./LiveMarkdown";
 import type { CreatePostAPIReqBody, EditPostAPIReqBody, IPost } from "@/types/index";
+import { slugify } from "@/utils/slugify";
 
 interface Props {
   isEdit?: boolean;
@@ -23,7 +24,8 @@ const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      const body = { title, content };
+      const slug = slugify(title);
+      const body = { title, content, slug };
       await onSubmit(body, e);
     } catch (error) {
       console.error(error);
