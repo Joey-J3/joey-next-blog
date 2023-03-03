@@ -19,7 +19,7 @@ export async function deletePost(id: string): Promise<void> {
   });
 }
 
-type GetPostsProps = Partial<Omit<IPost, 'author'>& PageInfo & { authorId: string; }>
+type GetPostsProps = Partial<Omit<IPost, 'author'>& PageInfo>
 
 export async function getPosts(params: GetPostsProps): Promise<IPost[]> {
   const validParams = Object.keys(params).reduce((res: any, key) => {

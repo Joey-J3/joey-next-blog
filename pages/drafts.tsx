@@ -7,6 +7,7 @@ import Layout from "@/components/Layout";
 import Post from "@/components/Post";
 import prisma from "@/lib/prisma";
 import { IPost } from "@/types/index";
+import EmptyState from "@/components/EmptyState";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
@@ -48,17 +49,21 @@ const Drafts: React.FC<Props> = (props) => {
     );
   }
 
+  const renderDraftList = () => {
+    return props.drafts.length === 0 ? <EmptyState>You have no drafts.</EmptyState> : props.drafts.map((post) => (
+      <div
+        key={post.id}
+      >
+        <Post post={post} />
+      </div>
+    ))
+  }
+
   return (
     <Layout>
       <h1>My Drafts</h1>
       <main className="flex flex-col gap-8 bg-slate-100 p-4 shadow-2xl rounded-2xl">
-        {props.drafts.map((post) => (
-          <div
-            key={post.id}
-          >
-            <Post post={post} />
-          </div>
-        ))}
+        {renderDraftList()}
       </main>
     </Layout>
   );

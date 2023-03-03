@@ -65,15 +65,6 @@ interface Props {
 }
 
 export default function UserPage({ userData, postsData, total }: Props) {
-  // const [searchText, setSearchText] = useState("");
-  // const [postList, setPostList] = useState<IPost[]>([]);
-  // const [loading, setLoading] = useState(false);
-  // const onSearch = async () => {
-  //   setLoading(true);
-  //   const data = await getPosts({ title: searchText });
-  //   setLoading(false);
-  //   setPostList(data);
-  // };
   const triggerRef = useRef(null);
   const onGrabData = async (pageNum: number) => {
     return await getPosts({ authorId: userData.id, pageNum });
@@ -87,12 +78,6 @@ export default function UserPage({ userData, postsData, total }: Props) {
     triggerRef,
     onGrabData,
   });
-
-  // useEffect(() => {
-  //   if (postsData && postsData.length) {
-  //     setPostList(postsData);
-  //   }
-  // }, [postsData]);
   return (
     <Layout home>
       <Head>
@@ -102,7 +87,6 @@ export default function UserPage({ userData, postsData, total }: Props) {
         <div className="flex-[3]">
           <Card>
             <>
-              {/* <h1 className="mb-4 text-[#0f172a]">Public Feed</h1> */}
               <main className="flex flex-col gap-8">
                 {postList.map((post) => (
                   <Post post={post} key={post.id} />

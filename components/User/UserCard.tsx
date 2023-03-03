@@ -30,14 +30,6 @@ const UserCard: React.FC<Prop> = function ({ userData, otherInfo }) {
               <label className=" text-gray-600 mr-1">文章</label>
               <span className=" text-gray-600">{otherInfo.total}</span>
             </div>
-            <div className=" whitespace-nowrap">
-              <label className=" text-gray-600 mr-1">文章</label>
-              <span className=" text-gray-600">{otherInfo.total}</span>
-            </div>
-            <div className=" whitespace-nowrap">
-              <label className=" text-gray-600 mr-1">文章</label>
-              <span className=" text-gray-600">{otherInfo.total}</span>
-            </div>
           </div>
         )}
       </div>

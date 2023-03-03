@@ -20,6 +20,7 @@ export type IPost = {
     name: string | null;
     email: string | null;
   } | null;
+  authorId: string;
   content: string;
   slug: string;
   published: boolean;

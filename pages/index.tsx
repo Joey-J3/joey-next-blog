@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
-import Head from 'next/head'
+import Head from 'next/head';
 import Image from 'next/image';
 import Router from 'next/router';
 import { useSession } from 'next-auth/react';
-import Layout, { siteTitle } from '@/components/Layout'
+import Layout, { siteTitle } from '@/components/Layout';
 import Post from '@/components/Post';
 import prisma from '@/lib/prisma';
-import utilStyles from '@/styles/utils.module.scss'
+import utilStyles from '@/styles/utils.module.scss';
 import CircularProgress from '@mui/material/CircularProgress';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Card from '@/components/Card';
 import SearchGroup from '@/components/SearchGroup';
 import type { IPost } from '@/types/index';
 import type { Session } from 'next-auth';
 import type { GetStaticProps } from 'next';
+import EmptyState from '@/components/EmptyState';
+import Link from 'next/link';
 
 export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = await prisma.post.findMany({
@@ -23,9 +26,9 @@ export const getStaticProps: GetStaticProps = async () => {
       },
       {
         author: {
-          name: 'asc'
-        }
-      }
+          name: 'asc',
+        },
+      },
     ],
     include: {
       author: {
@@ -44,31 +47,43 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 interface Props {
-  allPostsData: IPost[]
+  allPostsData: IPost[];
 }
 
 export default function Home({ allPostsData }: Props) {
-  const { data, status } = useSession()
+  const { data, status } = useSession();
   const [userData, setUserData] = useState<Session['user']>({});
   const [searchText, setSearchText] = useState('');
   const [postList, setPostList] = useState<IPost[]>([]);
-  const [loading, setLoading] = useState(false);
   const onSearch = async () => {
     await Router.push({
       pathname: 'search',
-      query: { searchText }
-    })
-  }
+      query: { searchText },
+    });
+  };
   useEffect(() => {
-    if(data?.user) {
-      setUserData(data.user)
+    if (data?.user) {
+      setUserData(data.user);
     }
   }, [data]);
   useEffect(() => {
     if (allPostsData && allPostsData.length) {
-      setPostList(allPostsData)
+      setPostList(allPostsData);
     }
   }, [allPostsData]);
+
+  const renderPostList = () => {
+    return postList.length === 0 ? (
+      <EmptyState>No Content Found!</EmptyState>
+    ) : (
+      postList.map((post) => (
+        <div key={post.id}>
+          <Post post={post} />
+        </div>
+      ))
+    );
+  };
+
   return (
     <Layout home>
       <Head>
@@ -92,7 +107,7 @@ export default function Home({ allPostsData }: Props) {
           </>
         ) : ''}
       </header> */}
-      <section className='my-2'>
+      <section className="my-2">
         <SearchGroup value={searchText} onChange={(value) => setSearchText(value)} onClick={() => onSearch()} />
       </section>
       {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
@@ -109,48 +124,46 @@ export default function Home({ allPostsData }: Props) {
           ))}
         </ul>
       </section> */}
-      <section className='flex flex-row flex-nowrap w-full gap-4'>
-        <div className='flex-[3]'>
-        <Card>
-          <>
-          <h1 className="mb-4 text-[#0f172a]">Public Feed</h1>
-          <main className='flex flex-col gap-8'>
-            {loading ? (
-              <div className='w-full flex items-center justify-center h-48'>
-                <CircularProgress />
-              </div>
-            ) :  postList.map((post) => (
-              <div key={post.id}>
-                <Post post={post} />
-              </div>
-            ))}
-          </main>
-          </>
-        </Card>
+      <section className="flex flex-row flex-nowrap w-full gap-4">
+        <div className="flex-[3]">
+          <Card>
+            <div className="min-h-[50%]">
+              <h1 className="mb-4 text-[#0f172a]">Public Feed</h1>
+              <main className="flex flex-col gap-8">
+                {renderPostList()}
+              </main>
+            </div>
+          </Card>
         </div>
         <div className="flex-1">
-        <Card>
-          <div className="flex flex-col items-center gap-2 min-h-[4em]">
-          { status === 'loading' ? (
-          <div>Loading...</div>
-        ) : status === 'authenticated' ? (
-          <>
-            <p className="text-lg">个人信息</p>
-            <Image
-              priority
-              src={userData?.image || '/images/avatar.jpg'}
-              className={utilStyles.borderCircle}
-              height={144}
-              width={144}
-              alt={userData?.name || ''}
-            />
-            <h1 className="text-xl">{`${userData?.name}'s Blog`}</h1>
-          </>
-        ) : null}
-          </div>
-        </Card>
+          <Card>
+            <div className="flex flex-col items-center gap-2 min-h-[4em]">
+              {status === 'loading' ? (
+                <div>Loading...</div>
+              ) : status === 'authenticated' ? (
+                <>
+                  <p className="text-lg">个人信息</p>
+                  <Image
+                    priority
+                    src={userData?.image || '/images/avatar.jpg'}
+                    className={utilStyles.borderCircle}
+                    height={144}
+                    width={144}
+                    alt={userData?.name || ''}
+                  />
+                  <h1 className="text-xl">{`${userData?.name}'s Blog`}</h1>
+                </>
+              ) : (
+                <EmptyState prefix={<AccountCircleIcon />}>
+                  <Link href="/api/auth/signin">
+                    <h4>Click here to login in.</h4>
+                  </Link>
+                </EmptyState>
+              )}
+            </div>
+          </Card>
         </div>
       </section>
     </Layout>
-  )
+  );
 }

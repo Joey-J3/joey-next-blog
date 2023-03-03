@@ -65,6 +65,7 @@ const Search: NextPage<Props> = function ({ query, data }) {
   const [loading, setLoading] = useState(false);
   const onSearch = async () => {
     setLoading(true);
+    setList([])
     const { key, executor } = searchStrategy.get(tabValue) as {
       key: string;
       executor: Function;
