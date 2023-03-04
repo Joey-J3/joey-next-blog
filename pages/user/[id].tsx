@@ -1,6 +1,6 @@
-import { UIEvent, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import Head from "next/head";
-import Layout, { siteTitle } from "@/components/Layout";
+import Layout from "@/components/Layout";
 import Post from "@/components/Post";
 import prisma from "@/lib/prisma";
 import CircularProgress from "@mui/material/CircularProgress";

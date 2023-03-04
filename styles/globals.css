@@ -96,7 +96,6 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb)) no-repeat; */
-  background-color: #0f172a;
   color: #94a9c9;
 }
 

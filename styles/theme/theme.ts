@@ -1,4 +1,4 @@
-import { createTheme, Palette } from "@mui/material";
+import { createTheme, Palette, ThemeOptions } from "@mui/material";
 import { orange } from "@mui/material/colors";
 
 declare module '@mui/material/styles' {
@@ -23,7 +23,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const theme = createTheme({
+export const darkTheme: ThemeOptions = {
   status: {
     danger: orange[500],
   },
@@ -52,6 +52,7 @@ export const theme = createTheme({
     }
   },
   palette: {
+    mode: 'dark',
     text: {
       primary: 'rgba(148, 169, 201, 1)',
       secondary: 'rgba(148, 169, 201, 0.7)',
@@ -62,4 +63,4 @@ export const theme = createTheme({
       default: '#0f172a'
     }
   }
-});
+}
