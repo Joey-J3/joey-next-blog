@@ -10,6 +10,7 @@ import { lightTheme } from '@/styles/theme/light';
 import { darkTheme } from '@/styles/theme/theme';
 import { ColorContext } from 'context/ColorContext';
 import { Inter } from '@next/font/google';
+import { SearchProvider } from 'context/SearchContext/SearchContext';
 const inter = Inter({ subsets: ['latin'] });
 
 NProgress.configure({ showSpinner: false });
@@ -31,6 +32,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 
   const theme = useMemo(() => createTheme(mode === 'light' ? lightTheme : darkTheme), [mode]);
+  
   return (
     <ColorContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -40,7 +42,9 @@ const App = ({ Component, pageProps }: AppProps) => {
             <link rel="stylesheet" type="text/css" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" />
           </Head>
           <div className={inter.className}>
-            <Component {...pageProps} />
+            <SearchProvider>
+              <Component {...pageProps} />
+            </SearchProvider>
           </div>
         </SessionProvider>
       </ThemeProvider>

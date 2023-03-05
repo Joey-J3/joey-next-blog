@@ -8,16 +8,22 @@ import Typography from '@mui/material/Typography';
 import { Session } from 'next-auth';
 import { useState } from 'react';
 import { signOut } from 'next-auth/react';
+import Router from 'next/router';
 
 interface Props {
   user: Session['user'];
 }
 
 enum MenuItemEnum {
-  LOG_OUT = 0
+  LOG_OUT = 0,
+  DRAFT = 1,
 }
 
 const settings = [
+  {
+    label: 'Drafts',
+    value: MenuItemEnum.DRAFT
+  },
   {
     label: 'Log out',
     value: MenuItemEnum.LOG_OUT
@@ -34,6 +40,8 @@ const UserMenu: React.FC<Props> = ({ user }) => {
   const handleClickMenuItem = (value: MenuItemEnum) => {
     if (value === MenuItemEnum.LOG_OUT) {
       signOut()
+    } else if (value === MenuItemEnum.DRAFT) {
+      Router.push('/drafts')
     }
   }
   return (
@@ -65,7 +73,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
       >
         {settings.map((setting) => (
           <MenuItem key={setting.value} onClick={() => handleClickMenuItem}>
-            <Typography textAlign="center">{setting.label}</Typography>
+            <Typography component='span' textAlign="center">{setting.label}</Typography>
           </MenuItem>
         ))}
       </Menu>

@@ -1,34 +1,35 @@
-import {  useEffect, useState } from "react";
-import { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import Image from "next/image";
-import BasicTabs, { TabPanel } from "@/components/BasicTabs";
-import Card from "@/components/Card";
-import Layout, { siteTitle } from "@/components/Layout";
-import Post from "@/components/Post";
-import SearchGroup from "@/components/SearchGroup";
-import CircularProgress from "@mui/material/CircularProgress";
-import { getPosts } from "common/api/post";
-import { getUsers } from "common/api/user";
-import utilStyles from '@/styles/utils.module.scss'
-import prisma from "@/lib/prisma";
-import EmptyState from "@/components/EmptyState";
+import { useCallback, useEffect, useState } from 'react';
+import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import Image from 'next/image';
+import BasicTabs, { TabPanel } from '@/components/BasicTabs';
+import Card from '@/components/Card';
+import Layout, { siteTitle } from '@/components/Layout';
+import Post from '@/components/Post';
+import SearchGroup from '@/components/SearchGroup';
+import CircularProgress from '@mui/material/CircularProgress';
+import { getPosts } from 'common/api/post';
+import { getUsers } from 'common/api/user';
+import utilStyles from '@/styles/utils.module.scss';
+import prisma from '@/lib/prisma';
+import EmptyState from '@/components/EmptyState';
+import { useSearchContext } from 'context/SearchContext/SearchContext';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const postList = await prisma.post.findMany({
     where: {
-      title: { contains: (query.searchText || "") as string, mode: 'insensitive' },
+      title: { contains: (query.searchText || '') as string, mode: 'insensitive' },
       published: true,
     },
     orderBy: {
-      updatedAt: 'desc'
+      updatedAt: 'desc',
     },
     include: {
       author: {
         select: {
           id: true,
-          name: true
+          name: true,
         },
       },
     },
@@ -37,103 +38,106 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return {
     props: {
       data: postList,
-      query
-    }
-  }
-}
+      query,
+    },
+  };
+};
 
 interface Props {
   query: { [key: string]: any };
   data: Array<any>;
 }
 
-const tabs = ["Feed", "User"].map((label, index) => ({ label, value: index }));
-const searchStrategy = new Map<number, { key: string; executor: Function }>([
+const tabs = ['Feed', 'User'].map((label, index) => ({ label, value: index }));
+interface IStrategy {
+  key: string;
+  executor: (params?: any) => Promise<Array<any>>;
+}
+const searchStrategy = new Map<number, IStrategy>([
   [
     0,
     {
-      key: "title",
+      key: 'title',
       executor: getPosts,
     },
   ],
-  [1, { key: "name", executor: getUsers }],
+  [1, { key: 'name', executor: getUsers }],
 ]);
+
+const initStrategy = searchStrategy.get(0) as IStrategy;
+
 const Search: NextPage<Props> = function ({ query, data }) {
-  const [searchText, setSearchText] = useState(query.searchText as string);
+  const { handleSearch, setExecutor, data: list, loading, initState } = useSearchContext();
   const [tabValue, setTabValue] = useState(0);
-  const [list, setList] = useState(data || []);
-  const [loading, setLoading] = useState(false);
-  const onSearch = async () => {
-    setLoading(true);
-    setList([])
-    const { key, executor } = searchStrategy.get(tabValue) as {
-      key: string;
-      executor: Function;
-    };
-    const data = await executor({ [key]: searchText });
-    setLoading(false);
-    setList(data);
-  };
+  const [strategy, setStrategy] = useState<IStrategy>(initStrategy);
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
+
+  // initial search context state
   useEffect(() => {
-    onSearch();
+    initState({ searchText: query.searchText as string || '', data, executor: initStrategy.executor });
+  }, []);
+
+  // change the strategy when the tab's changed
+  useEffect(() => {
+    setStrategy(searchStrategy.get(tabValue) as IStrategy);
   }, [tabValue]);
+  useEffect(() => {
+    const executor = (searchText: string) => strategy.executor({ [strategy.key]: searchText })
+    setExecutor(executor);
+  }, [strategy, setExecutor]);
+  useEffect(() => {
+    handleSearch();
+  }, [handleSearch]);
+
+  const renderList = (renderItem: (item: any) => JSX.Element) => (
+    <main className="flex flex-col gap-8">
+      {loading ? (
+        <div className="w-full flex items-center justify-center h-48">
+          <CircularProgress />
+        </div>
+      ) : list.length ? (
+        list.map(renderItem)
+      ) : (
+        <EmptyState />
+      )}
+    </main>
+  );
+
   return (
     <Layout>
       <Head>{siteTitle}</Head>
-      <section className="my-2">
-        <SearchGroup
-          value={searchText}
-          onChange={(value) => setSearchText(value)}
-          onClick={() => onSearch()}
-        />
-      </section>
       <section className="flex flex-row flex-nowrap w-full gap-4">
         <Card>
           <BasicTabs value={tabValue} tabs={tabs} onChange={handleTabChange}>
             <TabPanel index={0} value={tabValue}>
-              <main className="flex flex-col gap-8">
-                {loading ? (
-                  <div className="w-full flex items-center justify-center h-48">
-                    <CircularProgress />
-                  </div>
-                ) : (
-                  list.map((post) => <Post post={post} key={post.id} />)
-                )}
-              </main>
+              {renderList((post) => (
+                <Post post={post} key={post.id} />
+              ))}
             </TabPanel>
             <TabPanel index={1} value={tabValue}>
-              <main className="flex flex-col gap-8">
-                {loading ? (
-                  <div className="w-full flex items-center justify-center h-48">
-                    <CircularProgress />
-                  </div>
-                ) : (
-                  list.length ? list.map((user) => (
-                    <div key={user.id}>
-                      <Link
-                        href={`/user/${user.id}`}
-                        className="cursor-pointer bg-white transition-shadow hover:shadow p-8 flex"
-                      >
-                        <Image
-                          priority
-                          src={user?.image || "/images/avatar.jpg"}
-                          className={utilStyles.borderCircle}
-                          height={144}
-                          width={144}
-                          alt={user?.name || ""}
-                        />
-                        <div>
-                          <h2 className="text-[#0f172a]">{user.name}</h2>
-                          <small>{user.email}</small>
-                        </div>
-                      </Link>
+              {renderList((user) => (
+                <div key={user.id}>
+                  <Link
+                    href={`/user/${user.id}`}
+                    className="cursor-pointer bg-white transition-shadow hover:shadow p-8 flex"
+                  >
+                    <Image
+                      priority
+                      src={user?.image || '/images/avatar.jpg'}
+                      className={utilStyles.borderCircle}
+                      height={144}
+                      width={144}
+                      alt={user?.name || ''}
+                    />
+                    <div>
+                      <h2 className="text-[#0f172a]">{user.name}</h2>
+                      <small>{user.email}</small>
                     </div>
-                  )) : <EmptyState />
-                )}
-              </main>
+                  </Link>
+                </div>
+              ))}
             </TabPanel>
           </BasicTabs>
         </Card>

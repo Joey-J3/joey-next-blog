@@ -40,7 +40,7 @@ const ConfirmDialog: React.FC<Props> = ({ children, onSubmit, content }) => {
           </IconButton>
         </Box>
         <DialogContent>
-          <Typography>{content}</Typography>
+          <Typography component='span'>{content}</Typography>
         </DialogContent>
         <DialogActions>
           <Button color="primary" variant="outlined" onClick={() => setVisible(false)}>

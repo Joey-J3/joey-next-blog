@@ -11,39 +11,49 @@ import UserMenu from './UserMenu';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Add from '@mui/icons-material/Add';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useSearchContext } from 'context/SearchContext/SearchContext';
+import { useEffect, useState } from 'react';
 
 const pages = [
   {
     path: '/',
     label: 'Feeds',
   },
-  {
-    path: '/drafts',
-    label: 'Drafts',
-  },
 ];
 
 const Bar: React.FC = () => {
   const { data: session, status } = useSession();
   const router = useRouter()
-  const [searchText, setSearchText] = useState('');
-  // TODO 如何暴露这个搜索回调的入口
-  const handleSearch = () => {
-    if (router.pathname === '/search') {}
+  const { searchText, setSearchText } = useSearchContext()
+  const [searchValue, setSearchValue] = useState(searchText);
+
+  useEffect(() => {
+    setSearchValue(searchText)
+  }, [searchText]);
+
+  const onSearch = () => {
+    if (router.pathname !== '/search') {
+      router.push({
+        pathname: 'search',
+        query: { searchText: searchValue },
+      })
+    } else {
+      setSearchText(searchValue) // searchText change will call handleSearch
+      // handleSearch()
+    }
   }
   const right = (
     <div className="right flex flex-nowrap items-center">
       <SwitchThemeButton />
       {status === 'loading' ? (
         <div className="mr-auto">
-          <Typography>Validating session ...</Typography>
+          <Typography component='span'>Validating session ...</Typography>
         </div>
       ) : !session ? (
         <Button variant="text" sx={{ color: 'inherit' }}>
           <Link href="/api/auth/signin" legacyBehavior>
-            <Typography>Log in</Typography>
+            <Typography component='span'>Log in</Typography>
           </Link>
         </Button>
       ) : (
@@ -56,7 +66,7 @@ const Bar: React.FC = () => {
             </IconButton>
           </Tooltip>
           <p className="inline-block text-sm pr-4">
-            <Typography>
+            <Typography component='span'>
               {session.user?.name} ({session.user?.email})
             </Typography>
           </p>
@@ -90,12 +100,12 @@ const Bar: React.FC = () => {
             {pages.map((page) => (
               <Button key={page.path} sx={{ my: 2, color: 'inherit' }}>
                 <Link className="text-inherit" href={page.path}>
-                  <Typography sx={{ fontWeight: 'bold' }}>{page.label}</Typography>
+                  <Typography component='span' sx={{ fontWeight: 'bold' }}>{page.label}</Typography>
                 </Link>
               </Button>
             ))}
-            <SearchField value={searchText} onChange={(v) => setSearchText(v)} onSearch={handleSearch} />
           </Box>
+          <SearchField value={searchValue} onChange={setSearchValue} onSearch={onSearch} />
           {right}
         </Toolbar>
       </AppBar>

@@ -10,7 +10,7 @@ const EmptyState: React.FC<Props> = ({ prefix, children = 'No Result Found!' }) 
   return (
     <div className="w-full flex items-center justify-center h-48">
       { prefix || <SearchSharp /> }
-      <Typography>{ children }</Typography>
+      <Typography component='span'>{ children }</Typography>
     </div>
   )
 }

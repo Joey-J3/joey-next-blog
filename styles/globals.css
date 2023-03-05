@@ -96,11 +96,11 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb)) no-repeat; */
-  color: #94a9c9;
+  /* color: #94a9c9; */
 }
 
 a {
-  color: #0070f3;
+  /* color: #0070f3; */
   text-decoration: none;
 }
 

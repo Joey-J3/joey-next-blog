@@ -13,10 +13,10 @@ const Post: React.FC<{ post: IPost }> = ({ post }) => {
         onClick={() => Router.push('/posts/[id]', `/posts/${post.id}`)}
         className="cursor-pointer transition-shadow hover:shadow p-8 flex flex-col bg-inherit"
       >
-        <Typography>{post.title}</Typography>
+        <Typography component='span'>{post.title}</Typography>
         {/* <h2 className="text-[#0f172a]">{post.title}</h2> */}
         <Date dateString={post.updatedAt} />
-        <Typography>
+        <Typography component='span'>
           <small
             className="text-inherit
         "
