@@ -89,17 +89,14 @@ export const SearchProvider = ({ children }: ISearchProvider) => {
   );
 };
 
-export function useSearchContext() {
+export function useSearchContext(defaultState?: Partial<ISearchState>) {
   const { executor, data, searchText, loading, dispatch } = useContext(SearchContext);
-  const initState = useCallback(
-    (defaultState: Partial<ISearchState>) => {
-      dispatch({
-        type: ActionEnum.SET_STATE,
-        payload: defaultState,
-      });
-    },
-    [dispatch],
-  );
+  useEffect(() => {
+    dispatch({
+      type: ActionEnum.SET_STATE,
+      payload: defaultState,
+    });
+  }, []);
   const setLoading = useCallback(
     (loading: boolean) => {
       dispatch({
@@ -133,12 +130,12 @@ export function useSearchContext() {
     },
     [dispatch],
   );
-  const handleSearch = useCallback(async () => {
+  const handleSearch = useCallback(async function<T extends any>(params?: T) {
     setLoading(true);
-    const data = await executor(searchText);
+    const data = await executor(params);
     setData(data);
     setLoading(false);
-  }, [executor, setLoading, setData, searchText]);
+  }, [executor, setLoading, setData]);
 
   const setSearchText = useCallback(
     (value: ISearchState['searchText']) => {
@@ -164,7 +161,6 @@ export function useSearchContext() {
   );
 
   return {
-    initState,
     handleSearch,
     setSearchText,
     setExecutor,
