@@ -32,15 +32,18 @@ const Bar: React.FC = () => {
     setSearchValue(searchText)
   }, [searchText]);
 
-  const onSearch = () => {
+  const onSearch = async () => {
     if (router.pathname !== '/search') {
-      router.push({
+      await router.push({
         pathname: 'search',
         query: { searchText: searchValue },
       })
     } else {
       setSearchText(searchValue) // searchText change will call handleSearch
-      // handleSearch()
+      await router.replace({
+        pathname: 'search',
+        query: { searchText: searchValue },
+      })
     }
   }
   const right = (

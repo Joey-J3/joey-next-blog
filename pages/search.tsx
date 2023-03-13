@@ -7,41 +7,13 @@ import BasicTabs, { TabPanel } from '@/components/BasicTabs';
 import Card from '@/components/Card';
 import Layout, { siteTitle } from '@/components/Layout';
 import Post from '@/components/Post';
-import SearchGroup from '@/components/SearchGroup';
 import CircularProgress from '@mui/material/CircularProgress';
 import { getPosts } from 'common/api/post';
 import { getUsers } from 'common/api/user';
 import utilStyles from '@/styles/utils.module.scss';
-import prisma from '@/lib/prisma';
 import EmptyState from '@/components/EmptyState';
 import { useSearchContext } from 'context/SearchContext/SearchContext';
-
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const postList = await prisma.post.findMany({
-    where: {
-      title: { contains: (query.searchText || '') as string, mode: 'insensitive' },
-      published: true,
-    },
-    orderBy: {
-      updatedAt: 'desc',
-    },
-    include: {
-      author: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-    take: 20,
-  });
-  return {
-    props: {
-      data: postList,
-      query,
-    },
-  };
-};
+import { useRouter } from 'next/router';
 
 interface Props {
   query: { [key: string]: any };
@@ -64,32 +36,22 @@ const searchStrategy = new Map<number, IStrategy>([
   [1, { key: 'name', executor: getUsers }],
 ]);
 
-const initStrategy = searchStrategy.get(0) as IStrategy;
+const searchCallback = ({type, value}: {type: number, value: string}) => {
+  const { key, executor } = searchStrategy.get(type) as IStrategy
+  return executor({ [key]: value })
+}
 
-const Search: NextPage<Props> = function ({ query, data }) {
-  const { handleSearch, setExecutor, data: list, loading, initState } = useSearchContext();
+const Search: NextPage<Props> = function () {
+  const router = useRouter()
+  const { handleSearch, data: list, loading, searchText } = useSearchContext({ searchText: router.query.searchText as string || '', executor: searchCallback });
   const [tabValue, setTabValue] = useState(0);
-  const [strategy, setStrategy] = useState<IStrategy>(initStrategy);
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
-
-  // initial search context state
+  const onSearch = useCallback((params: any) => handleSearch(params), [handleSearch])
   useEffect(() => {
-    initState({ searchText: query.searchText as string || '', data, executor: initStrategy.executor });
-  }, []);
-
-  // change the strategy when the tab's changed
-  useEffect(() => {
-    setStrategy(searchStrategy.get(tabValue) as IStrategy);
-  }, [tabValue]);
-  useEffect(() => {
-    const executor = (searchText: string) => strategy.executor({ [strategy.key]: searchText })
-    setExecutor(executor);
-  }, [strategy, setExecutor]);
-  useEffect(() => {
-    handleSearch();
-  }, [handleSearch]);
+    onSearch({ type: tabValue, value: searchText });
+  }, [tabValue, onSearch, searchText]);
 
   const renderList = (renderItem: (item: any) => JSX.Element) => (
     <main className="flex flex-col gap-8">
