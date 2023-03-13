@@ -1,4 +1,4 @@
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import Draft from "@/components/Draft";
 import { IPost } from "../types";
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ const Edit: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      await Router.push("/drafts");
+      await router.push("/drafts");
     } catch (error) {
       console.error(error);
     }

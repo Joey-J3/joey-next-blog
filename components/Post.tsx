@@ -1,16 +1,17 @@
 import React from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import Date from '@/components/Date';
 import { IPost } from '../types';
 import Card from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 const Post: React.FC<{ post: IPost }> = ({ post }) => {
+  const router = useRouter()
   const authorName = post.author ? post.author.name : 'Unknown author';
   return (
     <Card>
       <div
-        onClick={() => Router.push('/posts/[id]', `/posts/${post.id}`)}
+        onClick={() => router.push('/posts/[id]', `/posts/${post.id}`)}
         className="cursor-pointer transition-shadow hover:shadow p-8 flex flex-col bg-inherit"
       >
         <Typography component='span'>{post.title}</Typography>

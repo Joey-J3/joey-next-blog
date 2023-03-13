@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { Session } from 'next-auth';
 import { useState } from 'react';
 import { signOut } from 'next-auth/react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 
 interface Props {
   user: Session['user'];
@@ -32,6 +32,7 @@ const settings = [
 
 const UserMenu: React.FC<Props> = ({ user }) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const router = useRouter()
 
   const handleOpenUserMenu = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(e.currentTarget);
@@ -41,7 +42,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
     if (value === MenuItemEnum.LOG_OUT) {
       signOut()
     } else if (value === MenuItemEnum.DRAFT) {
-      Router.push('/drafts')
+      router.push('/drafts')
     }
   }
   return (
@@ -72,7 +73,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         onClose={() => setAnchorElUser(null)}
       >
         {settings.map((setting) => (
-          <MenuItem key={setting.value} onClick={() => handleClickMenuItem}>
+          <MenuItem key={setting.value} onClick={() => handleClickMenuItem(setting.value)}>
             <Typography component='span' textAlign="center">{setting.label}</Typography>
           </MenuItem>
         ))}
