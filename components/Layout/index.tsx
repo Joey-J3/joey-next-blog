@@ -14,7 +14,7 @@ export const siteTitle = 'Joey Blog';
 
 function Layout({ children, className = [] }: LayoutProps) {
   return (
-    <div className={clsx(['w-full mb-24 pl-8 pr-8 bg-inherit', ...className])}>
+    <div className={clsx(['w-full pl-8 pr-8 bg-inherit', ...className])}>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="Post any you want here!" />

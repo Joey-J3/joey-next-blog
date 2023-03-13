@@ -1,25 +1,23 @@
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/system/Box";
-import { useEffect, useState } from "react";
-import Router from "next/router";
-import Layout from "./Layout";
-import LiveMarkdown from "./LiveMarkdown";
-import type { CreatePostAPIReqBody, EditPostAPIReqBody, IPost } from "@/types/index";
-import { slugify } from "@/utils/slugify";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/system/Box';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import Layout from './Layout';
+import LiveMarkdown from './LiveMarkdown';
+import type { CreatePostAPIReqBody, EditPostAPIReqBody, IPost } from '@/types/index';
+import { slugify } from '@/utils/slugify';
 
 interface Props {
   isEdit?: boolean;
   post?: IPost;
-  onSubmit: (
-    data: EditPostAPIReqBody | CreatePostAPIReqBody,
-    e: React.SyntheticEvent
-  ) => Promise<void>;
+  onSubmit: (data: EditPostAPIReqBody | CreatePostAPIReqBody, e: React.SyntheticEvent) => Promise<void>;
 }
 
 const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const router = useRouter()
 
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -44,33 +42,24 @@ const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
       <Box
         component="form"
         noValidate={true}
-        sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+        sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
         onSubmit={submitData}
         autoComplete="off"
         className="w-full"
       >
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
-          <h1>{title || "New Draft"}</h1>
-          <Box sx={{ display: "flex", gap: "1rem" }}>
-            <Button
-              disabled={!content || !title}
-              variant="contained"
-              type="submit"
-              color="primary"
-            >
-              {isEdit ? "Save" : "Create"}
+          <h1>{title || 'New Draft'}</h1>
+          <Box sx={{ display: 'flex', gap: '1rem' }}>
+            <Button disabled={!content || !title} variant="contained" type="submit" color="primary">
+              {isEdit ? 'Save' : 'Create'}
             </Button>
-            <Button
-              variant="outlined"
-              type="reset"
-              onClick={() => Router.back()}
-            >
+            <Button variant="outlined" type="reset" onClick={() => router.back()}>
               Cancel
             </Button>
           </Box>
@@ -83,10 +72,9 @@ const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
           value={title}
           className="w-full p-2 my-2 rounded"
         />
-        <LiveMarkdown
-          markdownInput={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
+        <div style={{ flex: 1 }}>
+          <LiveMarkdown markdownInput={content} onChange={(e) => setContent(e.target.value)} />
+        </div>
       </Box>
     </Layout>
   );
