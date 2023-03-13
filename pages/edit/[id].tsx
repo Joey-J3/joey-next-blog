@@ -1,4 +1,4 @@
-import Router from "next/router";
+import { useRouter } from "next/router";
 import Draft from "@/components/Draft";
 import { getPostByID } from "@/lib/post";
 import type { EditPostAPIReqBody, IPost } from "@/types/index";
@@ -27,6 +27,7 @@ interface Props {
 
 
 const Edit: React.FC<Props> = ({ post }) => {
+  const router = useRouter()
   const submitData = async (data: EditPostAPIReqBody) => {
     try {
       await fetch(`/api/post/${post?.id}`, {
@@ -34,7 +35,7 @@ const Edit: React.FC<Props> = ({ post }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      await Router.push("/posts/[id]", `/posts/${post?.id}`);
+      await router.push("/posts/[id]", `/posts/${post?.id}`);
     } catch (error) {
       console.error(error);
     }

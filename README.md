@@ -1,13 +1,8 @@
-## Getting Started
+# Next blog
 
-First, run the development server:
+## TODOLIST
 
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+[ ] feat: publish feature in the draft page
+[ ] feat: youtube video download
+[ ] feat: introduce slug for seo
+[ ] feat: use github username as slug of the user page

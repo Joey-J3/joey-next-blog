@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -76,6 +76,7 @@ interface Props {
 
 const Post: React.FC<Props> = ({ post }) => {
   const { data: session, status } = useSession();
+  const router = useRouter()
   if (status === "loading") {
     return <div>Authenticating ...</div>;
   }
@@ -91,7 +92,7 @@ const Post: React.FC<Props> = ({ post }) => {
     try {
       await publishPost(post.id)
       ng.done()
-      await Router.push("/");
+      await router.push("/");
     } catch (error) {
       console.error('Publish Post Fail with error:', error);
       ng.done()
@@ -103,7 +104,7 @@ const Post: React.FC<Props> = ({ post }) => {
     try {
       await deletePost(post.id)
       ng.done()
-      await Router.push("/");
+      await router.push("/");
     } catch (error) {
       console.error('Delete Post Fail with error:', error);
       ng.done()
@@ -130,7 +131,7 @@ const Post: React.FC<Props> = ({ post }) => {
                 </Button>
               )}
               <Button
-                onClick={() => Router.push(`/edit/${post.id}`)}
+                onClick={() => router.push(`/edit/${post.id}`)}
                 variant="outlined"
                 color="primary"
               >

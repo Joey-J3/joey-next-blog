@@ -1,6 +1,6 @@
 // pages/create.tsx
 
-import Router from "next/router";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import Draft from "@/components/Draft";
 import nProgress from "nprogress";
@@ -8,6 +8,7 @@ import type { IPost } from "../types";
 
 
 const Create: React.FC = () => {
+  const router = useRouter()
   const submitData = async (data: Partial<IPost>) => {
     try {
       nProgress.start()
@@ -17,7 +18,7 @@ const Create: React.FC = () => {
         body: JSON.stringify(data),
       });
       nProgress.done()
-      await Router.push("/drafts");
+      await router.push("/drafts");
     } catch (error) {
       console.error(error);
       nProgress.done()
