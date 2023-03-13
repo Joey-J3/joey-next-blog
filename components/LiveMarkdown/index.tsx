@@ -1,4 +1,5 @@
 import Visibility from "@mui/icons-material/Visibility";
+import TextField from "@mui/material/TextField";
 import styles from './live-markdown.module.scss'
 import Preview from "./Preview";
 
@@ -10,22 +11,22 @@ interface Props {
 const LiveMarkdown: React.FC<Props> = ({ markdownInput, onChange }) => {
   return (
     <div className={styles["live-markdown__container"]}>
-      {/* <div className={styles.header}>
-        <Header />
-      </div>
-       */}
       <div className={styles.wrapper}>
         <div className={styles['editor-box']}>
           <div className={styles.head}>
             <Visibility />
             MARKDOWN
           </div>
-          <textarea
+          <TextField
+            id="markdown-content"
+            placeholder="Markdown content"
+            multiline
             autoFocus
-            className={styles.textarea}
+            className={styles.markdown}
+            minRows={10}
             value={markdownInput}
             onChange={onChange}
-          ></textarea>
+          />
         </div>
         <div className={styles['preview-box']}>
           <div className={styles.head}>
