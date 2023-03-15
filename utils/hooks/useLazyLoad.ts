@@ -78,7 +78,7 @@ const useLazyLoad = ({ defaultState, triggerRef, onGrabData, options }: IUseLazy
       dispatch({ type: ACTION_TYPE_ENUM.SET, payload: { loading: true } });
       const data = await onGrabData(state.currentPage);
       if (data && data.length === 0) {
-        dispatch({ type: ACTION_TYPE_ENUM.SET, payload: { loading: false, isLastPage: true }})
+        dispatch({ type: ACTION_TYPE_ENUM.SET, payload: { loading: false, isLastPage: true } })
         return
       }
       dispatch({ type: ACTION_TYPE_ENUM.ON_GRAB_DATA, payload: { data } });
@@ -106,7 +106,7 @@ const useLazyLoad = ({ defaultState, triggerRef, onGrabData, options }: IUseLazy
     }
   }, [triggerRef, onIntersect, options]);
 
-  return state;
+  return { ...state, dispatch };
 };
 
 export default useLazyLoad;

@@ -1,28 +1,24 @@
-import { useRef } from "react";
-import Head from "next/head";
-import Layout from "@/components/Layout";
-import Post from "@/components/Post";
-import prisma from "@/lib/prisma";
-import CircularProgress from "@mui/material/CircularProgress";
-import { getPosts } from "common/api/post";
-import type { IPost, IUser } from "@/types/index";
-import type { GetServerSideProps } from "next";
-import Card from "@/components/Card";
-import UserCard from "@/components/User/UserCard";
-import useLazyLoad from "@/utils/hooks/useLazyLoad";
-import clsx from "clsx";
+import { useRef } from 'react';
+import Head from 'next/head';
+import Layout from '@/components/Layout';
+import Post from '@/components/Post';
+import prisma from '@/lib/prisma';
+import CircularProgress from '@mui/material/CircularProgress';
+import { getPosts } from 'common/api/post';
+import type { IPost, IUser } from '@/types/index';
+import type { GetServerSideProps } from 'next';
+import Card from '@/components/Card';
+import UserCard from '@/components/User/UserCard';
+import useLazyLoad from '@/utils/hooks/useLazyLoad';
+import clsx from 'clsx';
 
-const getUserPagePostListByPage = async (
-  userId: string,
-  pageNum = 1,
-  pageSize = 20
-) => {
+const getServerPostListByPage = async (userId?: string, pageNum = 1, pageSize = 20) => {
   const skip = (pageNum - 1) * pageSize;
   return await prisma.post.findMany({
     where: { published: true, authorId: userId },
     orderBy: [
       {
-        updatedAt: "desc",
+        updatedAt: 'desc',
       },
     ],
     include: {
@@ -48,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       },
     };
   }
-  const postsData = await getUserPagePostListByPage(params?.id as string);
+  const postsData = await getServerPostListByPage(params?.id as string);
   // get published post total
   const total = await prisma.post.count({
     where: { published: true, authorId: params?.id as string },
@@ -92,15 +88,8 @@ export default function UserPage({ userData, postsData, total }: Props) {
                   <Post post={post} key={post.id} />
                 ))}
               </main>
-              {isLastPage && (
-                <div className="flex items-center justify-center my-4">
-                  到底了...
-                </div>
-              )}
-              <div
-                ref={triggerRef}
-                className={clsx("trigger", { visible: loading })}
-              >
+              {isLastPage && <div className="flex items-center justify-center my-4">到底了...</div>}
+              <div ref={triggerRef} className={clsx('trigger', { visible: loading })}>
                 {loading && (
                   <>
                     <LoadingCardList />

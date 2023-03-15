@@ -1,5 +1,4 @@
 import { ActionType } from 'context/types';
-import { useRouter } from 'next/router';
 import { createContext, useCallback, useContext, useEffect, useReducer } from 'react';
 import { ActionEnum } from './actions';
 
