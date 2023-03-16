@@ -9,9 +9,8 @@ import prisma from '@/lib/prisma';
 import { IPost } from '@/types/index';
 import EmptyState from '@/components/EmptyState';
 import { getPosts, publishPost } from 'common/api/post';
-import useLazyLoad from '@/utils/hooks/useLazyLoad';
+import useLazyLoad, { LoadingCardList } from '@/utils/hooks/useLazyLoad';
 import clsx from 'clsx';
-import { LoadingCardList } from './user/[id]';
 import { CircularProgress } from '@mui/material';
 import { useRouter } from 'next/router';
 
@@ -61,7 +60,7 @@ const Drafts: React.FC<Props> = ({ drafts }) => {
     loading,
     isLastPage,
   } = useLazyLoad({
-    defaultState: { data: drafts, currentPage: 2 },
+    defaultState: { data: drafts, pagination: { current: 2, pageSize: 20 } },
     triggerRef,
     onGrabData,
   });
