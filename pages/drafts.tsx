@@ -11,7 +11,7 @@ import EmptyState from '@/components/EmptyState';
 import { getPosts, publishPost } from 'common/api/post';
 import useLazyLoad, { LoadingCardList } from '@/utils/hooks/useLazyLoad';
 import clsx from 'clsx';
-import { CircularProgress } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/router';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
