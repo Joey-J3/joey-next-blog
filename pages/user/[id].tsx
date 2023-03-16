@@ -9,7 +9,7 @@ import type { IPost, IUser } from '@/types/index';
 import type { GetServerSideProps } from 'next';
 import Card from '@/components/Card';
 import UserCard from '@/components/User/UserCard';
-import useLazyLoad from '@/utils/hooks/useLazyLoad';
+import useLazyLoad, { LoadingCardList } from '@/utils/hooks/useLazyLoad';
 import clsx from 'clsx';
 
 const getServerPostListByPage = async (userId?: string, pageNum = 1, pageSize = 20) => {
@@ -70,7 +70,7 @@ export default function UserPage({ userData, postsData, total }: Props) {
     loading,
     isLastPage,
   } = useLazyLoad({
-    defaultState: { data: postsData, currentPage: 2 },
+    defaultState: { data: postsData, pagination: { current: 2, pageSize: 20 } },
     triggerRef,
     onGrabData,
   });
@@ -109,25 +109,3 @@ export default function UserPage({ userData, postsData, total }: Props) {
     </Layout>
   );
 }
-
-export const LoadingCard: React.FC = () => {
-  return (
-    <div className="w-full rounded overflow-hidden shadow-lg m-2">
-      <div className="w-full h-64 bg-gray-300 animate-pulse"></div>
-      <div className="px-6 py-4 items-center">
-        <div className="font-regular text-xl mb-2 w-20 h-4 bg-gray-300 animate-pulse"></div>
-      </div>
-    </div>
-  );
-};
-
-export const LoadingCardList = () => {
-  const loadPages = [1, 2, 3, 4, 5, 6];
-  return (
-    <div className="grid grid-cols-3 gap-4 content-start">
-      {loadPages.map((num) => {
-        return <LoadingCard key={num} />;
-      })}
-    </div>
-  );
-};
