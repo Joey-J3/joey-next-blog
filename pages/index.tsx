@@ -1,21 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
+import clsx from 'clsx';
+import CircularProgress from '@mui/material/CircularProgress';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Layout, { siteTitle } from '@/components/Layout';
 import Post from '@/components/Post';
+import EmptyState from '@/components/EmptyState';
+import Card from '@/components/Card';
 import prisma from '@/lib/prisma';
 import utilStyles from '@/styles/utils.module.scss';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import Card from '@/components/Card';
+import useLazyLoad, { LoadingCardList } from '@/utils/hooks/useLazyLoad';
 import type { IPost } from '@/types/index';
 import type { Session } from 'next-auth';
 import type { GetStaticProps } from 'next';
-import EmptyState from '@/components/EmptyState';
 import Link from 'next/link';
+import { getPosts } from 'common/api/post';
 
 export const getStaticProps: GetStaticProps = async () => {
-  const allPostsData = await prisma.post.findMany({
+  const postsData = await prisma.post.findMany({
     where: { published: true },
     orderBy: [
       {
@@ -32,36 +36,48 @@ export const getStaticProps: GetStaticProps = async () => {
         select: { name: true },
       },
     },
+    take: 10,
+    skip: 0,
   });
   // get published post total
   const publishedPosts = await prisma.post.count({
     where: { published: true },
   });
   return {
-    props: { allPostsData, total: publishedPosts },
+    props: { postsData, total: publishedPosts },
     revalidate: 10,
   };
 };
 
 interface Props {
-  allPostsData: IPost[];
+  postsData: IPost[];
 }
 
-export default function Home({ allPostsData }: Props) {
+export default function Home({ postsData }: Props) {
   const { data, status } = useSession();
   const [userData, setUserData] = useState<Session['user']>({});
-  const [postList, setPostList] = useState<IPost[]>([]);
+  const triggerRef = useRef(null)
+
+  const onGrabData = async (pageNum: number) => {
+    return await getPosts({ published: true, pageNum, pageSize: 10 })
+  }
+  
+
+  const {
+    data: postList,
+    loading,
+    isLastPage,
+  } = useLazyLoad({
+    defaultState: { data: postsData, pagination: { pageSize: 10, current: 2 } },
+    triggerRef,
+    onGrabData,
+  });
 
   useEffect(() => {
     if (data?.user) {
       setUserData(data.user);
     }
   }, [data]);
-  useEffect(() => {
-    if (allPostsData && allPostsData.length) {
-      setPostList(allPostsData);
-    }
-  }, [allPostsData]);
 
   const renderPostList = () => {
     return postList.length === 0 ? (
@@ -86,6 +102,17 @@ export default function Home({ allPostsData }: Props) {
             <div className="min-h-[50%]">
               <h1 className="mb-4 text-[#0f172a]">Public Feed</h1>
               <main className="flex flex-col gap-8">{renderPostList()}</main>
+              {isLastPage && <div className="flex items-center justify-center my-4">到底了...</div>}
+              <div ref={triggerRef} className={clsx('trigger', { visible: loading })}>
+                {loading && (
+                  <>
+                    <LoadingCardList />
+                    <div className="w-full flex items-center justify-center h-48">
+                      <CircularProgress />
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </Card>
         </div>

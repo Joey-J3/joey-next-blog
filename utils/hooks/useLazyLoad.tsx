@@ -7,8 +7,11 @@ const LOAD_DELAY_MS = 500;
 interface IState {
   loading: boolean;
   data: Array<any>;
-  currentPage: number;
   isLastPage: boolean;
+  pagination: {
+    pageSize?: number,
+    current: number,
+  };
 }
 
 export enum ACTION_TYPE_ENUM {
@@ -21,14 +24,17 @@ export interface IAction {
   payload: Partial<IState>,
 }
 
-export const defaultState: IState = {
+export const initialState: IState = {
   loading: false,
   data: [],
-  currentPage: 1,
-  isLastPage: false
+  isLastPage: false,
+  pagination: {
+    current: 1,
+    pageSize: 10
+  }
 }
 
-export const reducer = (state: IState, action: IAction) => {
+export const reducer = (state: IState, action: IAction): IState => {
   switch (action.type) {
     case "set": {
       return {
@@ -41,7 +47,9 @@ export const reducer = (state: IState, action: IAction) => {
         ...state,
         loading: false,
         data: [...state.data, ...(action.payload.data as [])],
-        currentPage: state.currentPage + 1
+        pagination: {
+          current: state.pagination.current + 1
+        },
       };
     }
     default:
@@ -58,10 +66,7 @@ interface IUseLazyLoad {
 
 const useLazyLoad = ({ defaultState, triggerRef, onGrabData, options }: IUseLazyLoad) => {
   const [state, dispatch] = useReducer(reducer, {
-    loading: false,
-    currentPage: 1,
-    data: [],
-    isLastPage: false,
+    ...initialState,
     ...defaultState
   });
 
@@ -76,12 +81,11 @@ const useLazyLoad = ({ defaultState, triggerRef, onGrabData, options }: IUseLazy
       intersectionRect.bottom - boundingRect.bottom <= INTERSECTION_THRESHOLD
     ) {
       dispatch({ type: ACTION_TYPE_ENUM.SET, payload: { loading: true } });
-      const data = await onGrabData(state.currentPage);
-      if (data && data.length === 0) {
-        dispatch({ type: ACTION_TYPE_ENUM.SET, payload: { loading: false, isLastPage: true }})
-        return
-      }
+      const data = await onGrabData(state.pagination.current);
       dispatch({ type: ACTION_TYPE_ENUM.ON_GRAB_DATA, payload: { data } });
+      if (data && (data.length === 0 || (state.pagination.pageSize && state.pagination.pageSize > data.length))) {
+        dispatch({ type: ACTION_TYPE_ENUM.SET, payload: { loading: false, isLastPage: true } })
+      }
     }
   };
   const handleEntry = debounce(_handleEntry, LOAD_DELAY_MS);
@@ -106,7 +110,29 @@ const useLazyLoad = ({ defaultState, triggerRef, onGrabData, options }: IUseLazy
     }
   }, [triggerRef, onIntersect, options]);
 
-  return state;
+  return { ...state, dispatch };
 };
 
 export default useLazyLoad;
+
+export const LoadingCard: React.FC = () => {
+  return (
+    <div className="w-full rounded overflow-hidden shadow-lg m-2">
+      <div className="w-full h-64 bg-gray-300 animate-pulse"></div>
+      <div className="px-6 py-4 items-center">
+        <div className="font-regular text-xl mb-2 w-20 h-4 bg-gray-300 animate-pulse"></div>
+      </div>
+    </div>
+  );
+};
+
+export const LoadingCardList = () => {
+  const loadPages = [1, 2, 3, 4, 5, 6];
+  return (
+    <div className="grid grid-cols-3 gap-4 content-start">
+      {loadPages.map((num) => {
+        return <LoadingCard key={num} />;
+      })}
+    </div>
+  );
+};

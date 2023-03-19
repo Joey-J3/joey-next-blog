@@ -1,13 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
@@ -15,13 +12,13 @@ model Post {
   id        String   @id @default(cuid())
   title     String
   content   String?
-  slug      String   @unique
   published Boolean  @default(false)
-  author    User?    @relation(fields: [authorId], references: [id])
   authorId  String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  slug      String   @unique
+  author    User?    @relation(fields: [authorId], references: [id])
   tags      Tag[]    @relation("tagPosts")
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
 }
 
 model Tag {
@@ -32,8 +29,8 @@ model Tag {
   parent_id   Int?
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
-  posts       Post[]   @relation("tagPosts")
   count       Int      @default(0)
+  posts       Post[]   @relation("tagPosts")
 }
 
 model Account {
@@ -51,8 +48,7 @@ model Account {
   session_state      String?
   oauth_token_secret String?
   oauth_token        String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -71,8 +67,10 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  posts         Post[]
+  username      String?
+  providerAccountId  String?  @map("provider_account_id")
   accounts      Account[]
+  posts         Post[]
   sessions      Session[]
 }
 
