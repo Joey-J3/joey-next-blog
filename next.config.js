@@ -12,16 +12,6 @@ const nextConfig = {
     }
     return config;
   },
-  experimental: {
-    swcPlugins: [
-      [
-        'next-superjson-plugin',
-        {
-          excluded: [],
-        },
-      ],
-    ],
-  },
   images: {
     remotePatterns: [
       {
