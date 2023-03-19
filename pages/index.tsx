@@ -96,7 +96,7 @@ export default function Home({ postsData }: Props) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <section className="flex flex-row flex-nowrap w-full gap-4">
+      <section className="flex flex-nowrap w-full gap-4 flex-col-reverse md:flex-row min-w-[256px]">
         <div className="flex-[3]">
           <Card>
             <div className="min-h-[50%]">

@@ -1,6 +1,5 @@
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import { useTheme } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import DarkIcon from '@mui/icons-material/Brightness4';
 import LightIcon from '@mui/icons-material/Brightness7';
 import React from 'react';

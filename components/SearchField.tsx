@@ -1,4 +1,5 @@
-import { alpha, styled } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { alpha } from '@mui/system';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
@@ -15,6 +16,7 @@ const Search = styled('div')(({ theme }) => ({
   },
   marginLeft: 0,
   width: '100%',
+  display: 'flex',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(1),
     width: 'auto',
@@ -39,6 +41,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     width: '20ch',
+    [theme.breakpoints.down('sm')]: {
+      width: 0,
+      padding: 0,
+      transition: 'all 1s linear',
+    },
   },
 }));
 
@@ -60,8 +67,8 @@ const SearchField: React.FC<IProps> = ({ value, onChange, onSearch }) => {
         value={value}
         onChange={(e) => onChange(e.target.value, e)}
       />
-      <Button onClick={onSearch} variant="text" sx={{ ml: 2, color: 'inherit', height: '100%' }}>
-        <Typography component='span'>Search</Typography>
+      <Button onClick={onSearch} variant="text" className="text-inherit h-full w-full ml-2">
+        <Typography component="span">Search</Typography>
       </Button>
     </Search>
   );
