@@ -11,7 +11,7 @@ import Date from "@/components/Date";
 import Preview from "@/components/LiveMarkdown/Preview";
 import utilStyles from "@/styles/utils.module.scss";
 import { deletePost, publishPost } from "common/api/post";
-import { getPostByID } from "@/lib/post";
+import { getPostBySlug } from "@/lib/post";
 import type { IPost } from "@/types/index";
 import type { GetServerSideProps } from "next";
 
@@ -44,7 +44,7 @@ import type { GetServerSideProps } from "next";
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   let post = null
   try {
-    post = await getPostByID(params?.id as string)
+    post = await getPostBySlug(params?.slug as string)
   } catch (error) {
     throw new Error(String(error))
   }

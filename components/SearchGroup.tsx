@@ -12,7 +12,7 @@ const SearchGroup: React.FC<Props> = ({ value, onChange, onClick }) => {
   return (
     <>
       <TextField value={value} onChange={(e) => onChange(e.target.value, e)} type="text" placeholder="Please type the title." inputProps={{ style: { paddingTop: 8, paddingBottom: 8 }}} />
-      <Button onClick={onClick} color="primary" variant="contained" className="ml-2">Search</Button>
+      <Button onClick={onClick} variant="contained" className="ml-2">Search</Button>
     </>
   )
 }
