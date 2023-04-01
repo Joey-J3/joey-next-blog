@@ -105,3 +105,24 @@ export const getPostByID = async (id: string) => {
   
   return post;
 }
+
+
+/**
+ * Get post data by its id
+ * @param {string} id post id
+ * @returns {IPost}
+ */
+export const getPostBySlug = async (slug: string) => {
+  const post = await prisma.post.findUnique({
+    where: {
+      slug
+    },
+    include: {
+      author: {
+        select: { name: true, email: true },
+      },
+    },
+  });
+  
+  return post;
+}

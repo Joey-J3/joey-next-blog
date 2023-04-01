@@ -30,12 +30,13 @@ const Edit: React.FC<Props> = ({ post }) => {
   const router = useRouter()
   const submitData = async (data: EditPostAPIReqBody) => {
     try {
-      await fetch(`/api/post/${post?.id}`, {
+      const updatedPost = await fetch(`/api/post/${post?.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      });
-      await router.push("/posts/[id]", `/posts/${post?.id}`);
+      }).then(res => res.json());
+      
+      await router.push("/posts/[slug]", `/posts/${updatedPost.slug}`);
     } catch (error) {
       console.error(error);
     }

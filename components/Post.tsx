@@ -5,7 +5,6 @@ import { IPost } from '../types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { publishPost } from 'common/api/post';
 
 interface Props {
   post: IPost;
@@ -17,7 +16,7 @@ const Post: React.FC<Props> = ({ post, onPublish }) => {
   const authorName = post.author ? post.author.name : 'Unknown author';
   return (
     <Box
-      onClick={() => router.push('/posts/[id]', `/posts/${post.id}`)}
+      onClick={() => router.push('/posts/[slug]', `/posts/${post.slug}`)}
       className="cursor-pointer transition-shadow hover:shadow p-8 bg-inherit"
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -36,7 +35,7 @@ const Post: React.FC<Props> = ({ post, onPublish }) => {
         </Box>
         {!post.published && (
           <Box>
-            <Button variant="contained" color="primary" onClick={onPublish}>
+            <Button variant="contained" onClick={onPublish}>
               Publish
             </Button>
           </Box>
