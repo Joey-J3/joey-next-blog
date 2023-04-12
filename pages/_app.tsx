@@ -1,6 +1,5 @@
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
-import '@/styles/globals.css';
 import Head from 'next/head';
 import { CssBaseline, PaletteMode } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -10,6 +9,8 @@ import { darkTheme } from '@/styles/theme/theme';
 import { ColorContext } from 'context/ColorContext';
 import { SearchProvider } from 'context/SearchContext/SearchContext';
 import dynamic from 'next/dynamic';
+import '@/styles/globals.css';
+import '@/styles/markdown.scss'
 
 const TopProgressBar = dynamic(
   () => {
