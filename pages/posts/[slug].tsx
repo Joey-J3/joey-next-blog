@@ -8,7 +8,7 @@ import nProgress from "nprogress";
 import ConfirmDialog from "@/components/ComfirmDialog";
 import Layout from "@/components/Layout";
 import Date from "@/components/Date";
-import Preview from "@/components/LiveMarkdown/Preview";
+import Markdown from "@/components/Markdown";
 import utilStyles from "@/styles/utils.module.scss";
 import { deletePost, publishPost } from "common/api/post";
 import { getPostBySlug } from "@/lib/post";
@@ -159,7 +159,7 @@ const Post: React.FC<Props> = ({ post }) => {
           </span>
           Last Modified: <Date dateString={post.updatedAt} />
         </div>
-        <Preview markdownInput={post.content} />
+        <Markdown markdownInput={post.content} />
       </article>
     </Layout>
   );

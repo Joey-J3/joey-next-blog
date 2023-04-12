@@ -1,7 +1,7 @@
 import Visibility from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
 import styles from './live-markdown.module.scss'
-import Preview from "./Preview";
+import Markdown from "../Markdown";
 
 interface Props {
   markdownInput: string;
@@ -33,7 +33,7 @@ const LiveMarkdown: React.FC<Props> = ({ markdownInput, onChange }) => {
             <Visibility />
             PREIVEW
           </div>
-          <Preview markdownInput={markdownInput} />
+          <Markdown markdownInput={markdownInput} />
         </div>
       </div>
     </div>
