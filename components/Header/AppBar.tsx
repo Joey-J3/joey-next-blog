@@ -10,10 +10,12 @@ import SearchField from '../SearchField';
 import UserMenu from './UserMenu';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import Add from '@mui/icons-material/Add';
 import { useRouter } from 'next/router';
 import { useSearchContext } from 'context/SearchContext/SearchContext';
 import { useEffect, useState } from 'react';
+import { Psychology, Add } from '@mui/icons-material';
+import ChatModal from '../ChatModal';
+
 
 const pages = [
   {
@@ -27,6 +29,8 @@ const Bar: React.FC = () => {
   const router = useRouter()
   const { searchText, setSearchText } = useSearchContext()
   const [searchValue, setSearchValue] = useState(searchText);
+
+  const [chatModalVisible, setChatModalVisible] = useState(false);
 
   useEffect(() => {
     setSearchValue(searchText)
@@ -47,7 +51,11 @@ const Bar: React.FC = () => {
     }
   }
   const right = (
-    <div className="right flex flex-nowrap items-center">
+    <div className="right flex flex-nowrap items-center ml-1">
+      <IconButton aria-label="chat" onClick={() => setChatModalVisible(true)} color='inherit'>
+        <Psychology />
+      </IconButton>
+      <ChatModal visible={chatModalVisible} onClose={() => setChatModalVisible(false)} />
       <SwitchThemeButton />
       {status === 'loading' ? (
         <div className="mr-auto">
