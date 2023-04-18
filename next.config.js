@@ -1,11 +1,14 @@
 const path = require('path')
 const { NextFederationPlugin } = require('@module-federation/nextjs-mf');
 
+const mainAppUrl = process.env.MAIN_APP_URL
+const chatGPTAppUrl = process.env.CHAT_GPT_APP_URL
+
 const remotes = isServer => {
   const location = isServer ? 'ssr' : 'chunks';
   return {
-    main: `main@http://localhost:3000/_next/static/${location}/remoteEntry.js`,
-    'chatgptNext': `chatgptNext@http://localhost:3001/_next/static/${location}/remoteEntry.js`,
+    main: `main@${mainAppUrl}/_next/static/${location}/remoteEntry.js`,
+    'chatgptNext': `chatgptNext@${chatGPTAppUrl}/_next/static/${location}/remoteEntry.js`,
   };
 };
 

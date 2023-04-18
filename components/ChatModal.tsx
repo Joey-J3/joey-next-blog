@@ -1,6 +1,6 @@
-import { CircularProgress, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import MFWrapper from './MFWrapper';
 
 const Chat = dynamic(() => import('chatgptNext/chat'), { suspense: false })
 
@@ -16,9 +16,9 @@ export default function ChatModal({ visible, onClose }: Props) {
         <Typography>ChatGpt Next</Typography>
       </DialogTitle>
       <DialogContent>
-        <Suspense fallback={<CircularProgress />}>
+        <MFWrapper>
           <Chat />
-        </Suspense>
+        </MFWrapper>
       </DialogContent>
     </Dialog>
   )

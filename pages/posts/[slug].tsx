@@ -15,32 +15,6 @@ import { getPostBySlug } from "@/lib/post";
 import type { IPost } from "@/types/index";
 import type { GetServerSideProps } from "next";
 
-/**
- * Fetch necessary data for the blog post using params.id
- * @param {Record<string, any>} params
- * @returns {{Props}}
- */
-// export async function getStaticProps({ params }: { params: Record<string, any> }) {
-//   // const postData = await getPostData(params.id);
-//   // return {
-//   //   props: {
-//   //     postData,
-//   //   },
-//   // };
-//   const post = await prisma.post.findUnique({
-//     where: {
-//       id: String(params?.id),
-//     },
-//     include: {
-//       author: {
-//         select: { name: true },
-//       },
-//     },
-//   });
-//   return {
-//     props: post,
-//   };
-// }
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   let post = null
   try {
@@ -58,17 +32,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   };
 };
 
-/**
- * Return a list of possible value for id
- * @returns {{paths: Array; fallback: boolean}}
- */
-// export async function getStaticPaths() {
-//   const paths = getAllPostIds();
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// }
 
 interface Props {
   post: IPost;
