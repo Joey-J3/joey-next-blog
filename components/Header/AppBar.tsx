@@ -52,9 +52,11 @@ const Bar: React.FC = () => {
   }
   const right = (
     <div className="right flex flex-nowrap items-center ml-1">
-      <IconButton aria-label="chat" onClick={() => setChatModalVisible(true)} color='inherit'>
-        <Psychology />
-      </IconButton>
+      <Tooltip title="ChatGPT">
+        <IconButton aria-label="chat" onClick={() => setChatModalVisible(true)} color='inherit'>
+          <Psychology />
+        </IconButton>
+      </Tooltip>
       <ChatModal visible={chatModalVisible} onClose={() => setChatModalVisible(false)} />
       <SwitchThemeButton />
       {status === 'loading' ? (
