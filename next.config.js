@@ -1,13 +1,12 @@
 const path = require('path')
 const { NextFederationPlugin } = require('@module-federation/nextjs-mf');
 
-const mainAppUrl = process.env.MAIN_APP_URL
 const chatGPTAppUrl = process.env.CHAT_GPT_APP_URL
+const chatGPTAppOrigin= process.env.CHAT_GPT_APP_HREF
 
 const remotes = isServer => {
   const location = isServer ? 'ssr' : 'chunks';
   return {
-    main: `main@${mainAppUrl}/_next/static/${location}/remoteEntry.js`,
     'chatgptNext': `chatgptNext@${chatGPTAppUrl}/_next/static/${location}/remoteEntry.js`,
   };
 };
@@ -67,7 +66,8 @@ const nextConfig = {
     return [
       {
         source: '/chat/:path*',
-        destination: `${chatGPTAppUrl}/api/chat/:path*`,
+        destination: `${chatGPTAppOrigin}/api/chat/:path*`,
+        basePath: false,
       },
     ]
   },
