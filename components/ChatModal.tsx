@@ -15,7 +15,7 @@ export default function ChatModal({ visible, onClose }: Props) {
       <DialogTitle>
         <Typography>ChatGpt Next</Typography>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent dividers={true} sx={{ height: '568px'}}>
         <MFWrapper>
           <Chat />
         </MFWrapper>
