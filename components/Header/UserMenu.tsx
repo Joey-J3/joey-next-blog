@@ -52,7 +52,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
           <Avatar
             src={user?.image || '/images/avatar.jpg'}
             alt={user?.name || ''}
-            sx={{ display: 'inline-block', marginRight: '1rem' }}
+            sx={{ marginRight: '1rem' }}
           />
         </IconButton>
       </Tooltip>
