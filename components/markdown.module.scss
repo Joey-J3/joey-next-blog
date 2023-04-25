@@ -109,15 +109,6 @@
   @include dark;
 }
 
-:root {
-  @include light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    @include dark;
-  }
-}
 
 .markdown-body .octicon {
   display: inline-block;

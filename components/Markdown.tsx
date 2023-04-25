@@ -3,7 +3,8 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import remarkBreaks from 'remark-breaks';
 import CodeBlock from './LiveMarkdown/CodeBlock';
-import { CopyBtn } from './LiveMarkdown/copy-btn';
+import { CopyBtn } from './copy-btn';
+import styles from './markdown.module.scss'
 
 interface Props {
   markdownInput: string;
@@ -18,7 +19,7 @@ const MarkDown: React.FC<Props> = ({ markdownInput }) => {
   );
 
   return (
-    <div className='markdown-body'>
+    <div className={styles['markdown-body']}>
       <ReactMarkdown
         components={{
           pre: Pre,

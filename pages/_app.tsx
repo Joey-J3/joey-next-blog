@@ -10,7 +10,6 @@ import { ColorContext } from 'context/ColorContext';
 import { SearchProvider } from 'context/SearchContext/SearchContext';
 import dynamic from 'next/dynamic';
 import '@/styles/globals.css';
-import '@/styles/markdown.scss'
 
 const TopProgressBar = dynamic(
   () => {
