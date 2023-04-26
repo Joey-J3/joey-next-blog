@@ -1,6 +1,7 @@
 import ContentCopyOutlined from "@mui/icons-material/ContentCopyOutlined"
 import { useMessage } from "common/hooks/useMessage";
 import { Children, SyntheticEvent } from "react"
+import IconButton from '@mui/material/IconButton'
 
 interface Props {
   children: JSX.Element;
@@ -15,9 +16,9 @@ export const CopyBtn: React.FC<Props> = ({ children }) => {
   return (
     <>
       {Message}
-      <span className="text-white absolute right-2 top-2 transition cursor-pointer hover:scale-110">
-        <ContentCopyOutlined onClick={handleClick} />
-      </span>
+      <IconButton aria-label="copy" onClick={handleClick} sx={theme => ({ color: theme.palette.common.white})} style={{ position: 'absolute', right: '0.5rem', top: '0.5rem'}}>
+        <ContentCopyOutlined />
+      </IconButton>
     </>
   )
 }

@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { ReactNode } from 'react';
 import clsx, { ClassValue } from 'clsx';
 import Header from '@/components/Header';
-import { SearchProvider } from 'context/SearchContext/SearchContext';
 
 interface LayoutProps {
   children: ReactNode;

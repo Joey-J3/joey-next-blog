@@ -18,31 +18,43 @@ import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { getPosts } from 'common/api/post';
 
+const PAGE_NAME = 'index'
+
 export const getStaticProps: GetStaticProps = async () => {
-  const postsData = await prisma.post.findMany({
-    where: { published: true },
-    orderBy: [
-      {
-        updatedAt: 'desc',
-      },
-      {
+  let postsData: any[] = []
+  let publishedPosts = 0
+  try {
+    postsData = await prisma.post.findMany({
+      where: { published: true },
+      orderBy: [
+        {
+          updatedAt: 'desc',
+        },
+        {
+          author: {
+            name: 'asc',
+          },
+        },
+      ],
+      include: {
         author: {
-          name: 'asc',
+          select: { name: true },
         },
       },
-    ],
-    include: {
-      author: {
-        select: { name: true },
-      },
-    },
-    take: 10,
-    skip: 0,
-  });
-  // get published post total
-  const publishedPosts = await prisma.post.count({
-    where: { published: true },
-  });
+      take: 10,
+      skip: 0,
+    });
+  } catch (error) {
+    console.error(`page:[${PAGE_NAME}] error: ${error}`);
+  }
+  try {
+    // get published post total
+    publishedPosts = await prisma.post.count({
+      where: { published: true },
+    });
+  } catch (error) {
+    console.error(`page:[${PAGE_NAME}] error: ${error}`);
+  }
   return {
     props: { postsData, total: publishedPosts },
     revalidate: 10,
