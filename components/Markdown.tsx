@@ -1,4 +1,4 @@
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import remarkBreaks from 'remark-breaks';
@@ -26,6 +26,7 @@ const MarkDown: React.FC<Props> = ({ markdownInput }) => {
           code: CodeBlock,
         }}
         remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
+        linkTarget={"_blank"}
       >
         {markdownInput}
       </ReactMarkdown>
