@@ -4,10 +4,50 @@ const { NextFederationPlugin } = require('@module-federation/nextjs-mf');
 const chatGPTAppUrl = process.env.CHAT_GPT_APP_URL
 const chatGPTAppOrigin= process.env.CHAT_GPT_APP_HREF
 
+function dynamicRemotes(remoteUrl, scope) {
+  return `promise new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = '${remoteUrl}'
+    script.async = true
+    script.onload = () => {
+      const proxy = {
+        get: (request) => {
+          try {
+            return ${scope}.get(request)
+          } catch(e) {
+            console.error('[ERROR] Load remote error: Making request error:', e)
+          }
+        },
+        init: (arg) => {
+          try {
+            return ${scope}.init(arg)
+          } catch(e) {
+            console.log('remote container already initialized')
+          }
+        }
+      }
+      resolve(proxy)
+    }
+    script.onerror = (error) => {
+      console.error('error loading remote container[${scope}]', error)
+      const proxy = {
+        get: (request) => {
+          return Promise.reject(error);
+        },
+        init: (arg) => {
+          return;
+        }
+      }
+      resolve(proxy)
+    }
+    document.head.appendChild(script);
+  })`
+}
+
 const remotes = isServer => {
   const location = isServer ? 'ssr' : 'chunks';
   return {
-    'chatgptNext': `chatgptNext@${chatGPTAppUrl}/_next/static/${location}/remoteEntry.js`,
+    'chatgptNext': dynamicRemotes(`${chatGPTAppUrl}/_next/static/${location}/remoteEntry.js`, 'chatgptNext'),
   };
 };
 
@@ -35,22 +75,6 @@ const nextConfig = {
             requiredVersion: '5.11.0',
           },
           '@mui/material': {
-            singleton: true,
-            requiredVersion: false,
-          },
-          'react-markdown': {
-            singleton: true,
-            requiredVersion: false,
-          },
-          'remark-gfm': {
-            singleton: true,
-            requiredVersion: false,
-          },
-          'remark-math': {
-            singleton: true,
-            requiredVersion: false,
-          },
-          'remark-breaks': {
             singleton: true,
             requiredVersion: false,
           },
