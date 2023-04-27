@@ -26,6 +26,7 @@ const MarkDown: React.FC<Props> = ({ markdownInput }) => {
           code: CodeBlock,
         }}
         remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
+        linkTarget={"_blank"}
       >
         {markdownInput}
       </ReactMarkdown>

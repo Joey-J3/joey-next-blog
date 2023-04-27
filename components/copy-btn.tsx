@@ -16,7 +16,7 @@ export const CopyBtn: React.FC<Props> = ({ children }) => {
   return (
     <>
       {Message}
-      <IconButton aria-label="copy" onClick={handleClick} sx={theme => ({ color: theme.palette.common.white})} style={{ position: 'absolute', right: '0.5rem', top: '0.5rem'}}>
+      <IconButton aria-label="copy" onClick={handleClick} sx={theme => ({ color: theme.palette.common.white })} style={{ position: 'absolute', right: '0.5rem', top: '0.5rem' }} size="small">
         <ContentCopyOutlined />
       </IconButton>
     </>
