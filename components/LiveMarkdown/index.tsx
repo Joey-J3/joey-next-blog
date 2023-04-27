@@ -1,7 +1,9 @@
+import dynamic from "next/dynamic";
 import Visibility from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
 import styles from './live-markdown.module.scss'
-import Markdown from "../Markdown";
+import CenterLoading from "../CenterLoadng";
+const Markdown = dynamic(() => import('@/components/Markdown'), { loading: () => <CenterLoading />})
 
 interface Props {
   markdownInput: string;

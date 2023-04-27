@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import clsx from "clsx";
@@ -8,12 +9,14 @@ import nProgress from "nprogress";
 import ConfirmDialog from "@/components/ComfirmDialog";
 import Layout from "@/components/Layout";
 import Date from "@/components/Date";
-import Markdown from "@/components/Markdown";
 import utilStyles from "@/styles/utils.module.scss";
 import { deletePost, publishPost } from "common/api/post";
 import { getPostBySlug } from "@/lib/post";
 import type { IPost } from "@/types/index";
 import type { GetServerSideProps } from "next";
+import CenterLoading from "@/components/CenterLoadng";
+
+const Markdown = dynamic(() => import('@/components/Markdown'), { loading: () => <CenterLoading />})
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   let post = null

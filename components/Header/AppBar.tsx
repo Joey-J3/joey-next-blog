@@ -14,8 +14,9 @@ import { useRouter } from 'next/router';
 import { useSearchContext } from 'context/SearchContext/SearchContext';
 import { useEffect, useState } from 'react';
 import { Psychology, Add } from '@mui/icons-material';
-import ChatModal from '../ChatModal';
+import dynamic from 'next/dynamic';
 
+const ChatModal = dynamic(async () => await import('../ChatModal'))
 
 const pages = [
   {
@@ -37,15 +38,17 @@ const Bar: React.FC = () => {
   }, [searchText]);
 
   const onSearch = async () => {
+    console.log(router.pathname);
+    
     if (router.pathname !== '/search') {
       await router.push({
-        pathname: 'search',
+        pathname: '/search',
         query: { searchText: searchValue },
       })
     } else {
       setSearchText(searchValue) // searchText change will call handleSearch
       await router.replace({
-        pathname: 'search',
+        pathname: '/search',
         query: { searchText: searchValue },
       })
     }
