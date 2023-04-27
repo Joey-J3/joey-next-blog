@@ -9,12 +9,12 @@ const CodeBlock = ({ className, children, inline, ...props }: CodeProps) => {
   //   props.inline = props.inline.toString(); // BUG: https://github.com/react-syntax-highlighter/react-syntax-highlighter/issues/395
   // }
   // props.inline = 'true'
-  return !inline && match ? (
+  return !inline ? (
     <SyntaxHighlighter
       {...props}
       style={a11yDark}
       PreTag="div"
-      language={match ? match[1] : "language-js"}
+      language={match ? match[1] : "shell"}
     >
       {String(children).replace(/\n$/, "")}
     </SyntaxHighlighter>
