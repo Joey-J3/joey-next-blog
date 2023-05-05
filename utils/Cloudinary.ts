@@ -1,14 +1,20 @@
 import { v2, UploadApiOptions } from 'cloudinary'
 const cloudinary = v2
 
+export const cloud_name = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+
+export const api_key = process.env.CLOUDINARY_API_KEY
+
+export const api_secret = process.env.CLOUDINARY_API_SECRET
+
 /**
  * CDN for static assets
  */
 
 cloudinary.config({
-  cloud_name: "dqckvpk9x",
-  api_key: "229478717524999",
-  api_secret: "JIUrLTCluqB_zJDECbTPqJ64s6A"
+  cloud_name,
+  api_key,
+  api_secret,
 });
 
 export async function upload(file: string, options?: UploadApiOptions) {
