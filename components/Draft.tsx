@@ -73,7 +73,7 @@ const Draft: React.FC<Props> = ({ isEdit, post, onSubmit }) => {
           className="w-full p-2 my-2 rounded"
         />
         <div style={{ flex: 1 }}>
-          <LiveMarkdown markdownInput={content} onChange={(e) => setContent(e.target.value)} />
+          <LiveMarkdown markdownInput={content} onChange={setContent} />
         </div>
       </Box>
     </Layout>
