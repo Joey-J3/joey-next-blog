@@ -38,8 +38,6 @@ const Bar: React.FC = () => {
   }, [searchText]);
 
   const onSearch = async () => {
-    console.log(router.pathname);
-    
     if (router.pathname !== '/search') {
       await router.push({
         pathname: '/search',
