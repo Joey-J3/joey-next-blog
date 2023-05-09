@@ -14,7 +14,7 @@ import { deletePost, publishPost } from 'common/api/post';
 import { getPostBySlug } from '@/lib/post';
 import type { IPost } from '@/types/index';
 import type { GetServerSideProps } from 'next';
-import CenterLoading from '@/components/CenterLoadng';
+import CenterLoading from '@/components/CenterLoading';
 
 const Markdown = dynamic(() => import('@/components/Markdown'), { loading: () => <CenterLoading /> });
 
