@@ -1,6 +1,6 @@
 {
   "name": "joey-next-blog",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,8 @@
     "lint": "next lint",
     "analyze": "ANALYZE=true yarn build",
     "schema_format": "prisma format",
-    "schema_deploy": "prisma migrate deploy"
+    "schema_deploy": "prisma migrate deploy",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
