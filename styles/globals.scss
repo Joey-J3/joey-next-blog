@@ -3,6 +3,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "@/styles/markdown/theme";
+
+@mixin light {
+}
+
+@mixin dark {
+}
+
+.light {
+  @include light;
+}
+
+.dark {
+  @include dark;
+}
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
@@ -43,10 +59,12 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+  @include light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    @include dark;
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
@@ -89,18 +107,7 @@ body {
   height: 100vh;
 }
 
-body {
-  /* background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb)) no-repeat; */
-  /* color: #94a9c9; */
-}
-
 a {
-  /* color: #0070f3; */
   text-decoration: none;
 }
 

@@ -9,7 +9,8 @@ import { darkTheme } from '@/styles/theme/theme';
 import { ColorContext } from 'context/ColorContext';
 import { SearchProvider } from 'context/SearchContext/SearchContext';
 import dynamic from 'next/dynamic';
-import '@/styles/globals.css';
+import '@/styles/globals.scss';
+// import '@/styles/markdown-theme.scss';
 
 const TopProgressBar = dynamic(
   () => {
@@ -51,7 +52,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             <Head>
               <link rel="stylesheet" type="text/css" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" />
             </Head>
-            <div>
+            <div className={mode}>
               <SearchProvider>
                 <Component {...pageProps} />
               </SearchProvider>
