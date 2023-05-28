@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { useRouter } from 'next/router';
 import { useSearchContext } from 'context/SearchContext/SearchContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Psychology, Add } from '@mui/icons-material';
 import dynamic from 'next/dynamic';
 
@@ -30,6 +30,11 @@ const Bar: React.FC = () => {
   const router = useRouter()
   const { searchText, setSearchText } = useSearchContext()
   const [searchValue, setSearchValue] = useState(searchText);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(true)
+  }, [])
 
   const [chatModalVisible, setChatModalVisible] = useState(false);
 
@@ -53,7 +58,7 @@ const Bar: React.FC = () => {
   }
   const right = (
     <div className="right flex flex-nowrap items-center ml-1">
-      <Tooltip title="ChatGPT">
+      <Tooltip open={open} title="ChatGPT" arrow onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
         <IconButton aria-label="chat" onClick={() => setChatModalVisible(true)} color='inherit'>
           <Psychology />
         </IconButton>
