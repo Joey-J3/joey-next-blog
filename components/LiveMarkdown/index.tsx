@@ -50,7 +50,6 @@ const LiveMarkdown: React.FC<Props> = ({ markdownInput, onChange }) => {
   const [loading, setLoading] = useState(false);
   const textFieldRef = useRef<HTMLTextAreaElement | null>(null);
   const handlePaste = async (e: ClipboardEvent<HTMLDivElement>) => {
-    e.preventDefault();
     const turndownService = new TurndownService();
     const dT = e.clipboardData;
     const html = dT.getData('text/html') || '';
@@ -58,6 +57,8 @@ const LiveMarkdown: React.FC<Props> = ({ markdownInput, onChange }) => {
     setLoading(true);
     try {
       const result = await asyncReplacement(md);
+      console.log('🚀',dT, html, md, result);
+      
       insertText(result);
     } catch (error) {
       console.error(error);

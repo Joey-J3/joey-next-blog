@@ -106,6 +106,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'p3-juejin.byteimg.com',
         port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'p9-juejin.byteimg.com',
+        port: '',
       }
     ]
   }
